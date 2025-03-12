@@ -18,8 +18,13 @@ export const languageNames: Record<Language, string> = {
   de: 'Deutsch',
 };
 
+// Define type for the translations
+type TranslationsType = {
+  [key: string]: any;
+};
+
 // Store all translations
-const translations = {
+const translations: Record<Language, TranslationsType> = {
   en: enTranslations,
   es: esTranslations,
   fr: frTranslations,
@@ -58,11 +63,11 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     try {
       // Get nested keys like 'header.title'
       const keys = key.split('.');
-      let result = translations[language];
+      let result: any = translations[language];
       
       for (const k of keys) {
         if (result && typeof result === 'object' && k in result) {
-          result = result[k as keyof typeof result];
+          result = result[k];
         } else {
           // Key not found
           console.warn(`Translation key not found: ${key} in ${language}`);
@@ -70,7 +75,12 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
         }
       }
       
-      return result as string;
+      if (typeof result !== 'string') {
+        console.warn(`Translation result is not a string for key: ${key} in ${language}`);
+        return key;
+      }
+      
+      return result;
     } catch (error) {
       console.error(`Translation error for key "${key}" in ${language}:`, error);
       return key;
