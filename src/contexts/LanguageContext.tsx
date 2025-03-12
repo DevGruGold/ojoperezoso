@@ -1,5 +1,10 @@
 
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import enTranslations from '../translations/en.json';
+import esTranslations from '../translations/es.json';
+import frTranslations from '../translations/fr.json';
+import ptTranslations from '../translations/pt.json';
+import deTranslations from '../translations/de.json';
 
 // Define supported languages
 export type Language = 'es' | 'en' | 'fr' | 'pt' | 'de';
@@ -11,6 +16,15 @@ export const languageNames: Record<Language, string> = {
   fr: 'Français',
   pt: 'Português',
   de: 'Deutsch',
+};
+
+// Store all translations
+const translations = {
+  en: enTranslations,
+  es: esTranslations,
+  fr: frTranslations,
+  pt: ptTranslations,
+  de: deTranslations,
 };
 
 // Define context type
@@ -42,10 +56,21 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   // Translation function
   const t = (key: string): string => {
     try {
-      // Dynamically import the translations
-      const translations = require(`../translations/${language}.json`);
       // Get nested keys like 'header.title'
-      return key.split('.').reduce((obj, i) => obj[i], translations) || key;
+      const keys = key.split('.');
+      let result = translations[language];
+      
+      for (const k of keys) {
+        if (result && typeof result === 'object' && k in result) {
+          result = result[k as keyof typeof result];
+        } else {
+          // Key not found
+          console.warn(`Translation key not found: ${key} in ${language}`);
+          return key;
+        }
+      }
+      
+      return result as string;
     } catch (error) {
       console.error(`Translation error for key "${key}" in ${language}:`, error);
       return key;
