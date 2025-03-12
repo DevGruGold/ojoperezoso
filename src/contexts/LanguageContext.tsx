@@ -19,9 +19,7 @@ export const languageNames: Record<Language, string> = {
 };
 
 // Define type for the translations
-type TranslationsType = {
-  [key: string]: any;
-};
+type TranslationsType = Record<string, any>;
 
 // Store all translations
 const translations: Record<Language, TranslationsType> = {
@@ -54,6 +52,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   
   // Update localStorage when language changes
   useEffect(() => {
+    console.log(`Language changed to: ${language}`);
     localStorage.setItem('language', language);
     document.documentElement.lang = language;
   }, [language]);

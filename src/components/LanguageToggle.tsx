@@ -12,6 +12,11 @@ import {
 const LanguageToggle = () => {
   const { language, setLanguage, t } = useLanguage();
 
+  const handleLanguageChange = (newLanguage: Language) => {
+    console.log(`Changing language from ${language} to ${newLanguage}`);
+    setLanguage(newLanguage);
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors duration-200">
@@ -22,7 +27,7 @@ const LanguageToggle = () => {
         {Object.entries(languageNames).map(([code, name]) => (
           <DropdownMenuItem 
             key={code}
-            onClick={() => setLanguage(code as Language)}
+            onClick={() => handleLanguageChange(code as Language)}
             className={language === code ? "bg-primary/10 text-primary font-medium" : ""}
           >
             {name}
