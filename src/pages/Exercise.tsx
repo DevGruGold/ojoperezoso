@@ -7,9 +7,12 @@ import ProgressIndicator from '@/components/ProgressIndicator';
 import Button from '@/components/Button';
 import { Eye, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { downloadFaceModels } from '@/utils/downloadFaceModels';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Exercise = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [leftEyeDetected, setLeftEyeDetected] = useState(false);
   const [rightEyeDetected, setRightEyeDetected] = useState(false);
   const [sessionStarted, setSessionStarted] = useState(false);
@@ -19,6 +22,17 @@ const Exercise = () => {
   const [progress, setProgress] = useState(0);
   const [showInstructions, setShowInstructions] = useState(true);
   const [currentExercise, setCurrentExercise] = useState(1);
+  const [modelsLoaded, setModelsLoaded] = useState(false);
+  
+  // Download face-api.js models
+  useEffect(() => {
+    const loadModels = async () => {
+      const result = await downloadFaceModels();
+      setModelsLoaded(result);
+    };
+    
+    loadModels();
+  }, []);
   
   // Timer logic
   useEffect(() => {

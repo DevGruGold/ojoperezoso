@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Eye } from 'lucide-react';
+import * as faceapi from 'face-api.js';
 
 interface CameraViewProps {
   onEyeDetected?: (leftEye: boolean, rightEye: boolean) => void;
@@ -13,6 +14,44 @@ const CameraView = ({ onEyeDetected, showGuides = true }: CameraViewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [cameraReady, setCameraReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [modelsLoaded, setModelsLoaded] = useState(false);
+  
+  // Load face-api.js models
+  useEffect(() => {
+    const loadModels = async () => {
+      try {
+        await Promise.all([
+          faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+          faceapi.nets.faceLandmark68Net.loadFromUri('/models')
+        ]);
+        setModelsLoaded(true);
+        console.log('Face detection models loaded');
+      } catch (err) {
+        console.error('Error loading face detection models:', err);
+        setError('Error loading face tracking models. Please reload the page.');
+      }
+    };
+    
+    // Create models directory if it doesn't exist
+    const createModelsDirectory = async () => {
+      try {
+        // Check if models directory exists
+        const response = await fetch('/models/tiny_face_detector_model-weights_manifest.json', { method: 'HEAD' });
+        if (response.status === 404) {
+          setError('Face detection models not found. Downloading...');
+          // We need to download the models
+          await loadModels();
+        } else {
+          await loadModels();
+        }
+      } catch (err) {
+        console.error('Error checking models directory:', err);
+        await loadModels();
+      }
+    };
+    
+    createModelsDirectory();
+  }, []);
   
   // Initialize the camera
   useEffect(() => {
@@ -51,61 +90,104 @@ const CameraView = ({ onEyeDetected, showGuides = true }: CameraViewProps) => {
     };
   }, []);
   
-  // Simulate eye detection (in a real app, this would use proper ML eye tracking)
+  // Track eyes using face-api.js
   useEffect(() => {
-    if (!cameraReady || !onEyeDetected) return;
+    if (!cameraReady || !modelsLoaded || !onEyeDetected || !videoRef.current) return;
     
     let animationId: number;
     let frameCount = 0;
     
-    const simulateEyeDetection = () => {
+    const trackEyes = async () => {
       frameCount++;
       
-      // Simulate detection results every 30 frames (about once per second at 30fps)
-      if (frameCount % 30 === 0) {
-        // For demo purposes, randomly detect eyes 80% of the time
-        const leftEyeDetected = Math.random() > 0.2;
-        const rightEyeDetected = Math.random() > 0.2;
-        
-        onEyeDetected(leftEyeDetected, rightEyeDetected);
-        
-        // If we have a canvas and both eyes detected, draw eye positions (simulated)
-        if (canvasRef.current && containerRef.current && leftEyeDetected && rightEyeDetected) {
-          const ctx = canvasRef.current.getContext('2d');
-          const containerWidth = containerRef.current.clientWidth;
-          const containerHeight = containerRef.current.clientHeight;
+      // Process every few frames to improve performance
+      if (frameCount % 3 === 0 && videoRef.current) {
+        try {
+          // Detect faces with landmarks
+          const detections = await faceapi.detectAllFaces(
+            videoRef.current, 
+            new faceapi.TinyFaceDetectorOptions()
+          ).withFaceLandmarks();
           
-          if (ctx) {
-            // Clear previous frames
-            ctx.clearRect(0, 0, containerWidth, containerHeight);
+          if (detections && detections.length > 0) {
+            const faceDetection = detections[0]; // Use the first face detected
+            const landmarks = faceDetection.landmarks;
+            const leftEye = landmarks.getLeftEye();
+            const rightEye = landmarks.getRightEye();
             
-            // Only draw guides if showGuides is true
-            if (showGuides) {
-              // Left eye position (simulated)
-              const leftEyeX = containerWidth * 0.35;
-              const leftEyeY = containerHeight * 0.4;
+            // Check if both eyes are detected
+            const leftEyeDetected = leftEye.length > 0;
+            const rightEyeDetected = rightEye.length > 0;
+            
+            // Update eye detection state
+            onEyeDetected(leftEyeDetected, rightEyeDetected);
+            
+            // Draw eye positions if both eyes detected and showGuides is true
+            if (canvasRef.current && containerRef.current && leftEyeDetected && rightEyeDetected && showGuides) {
+              const ctx = canvasRef.current.getContext('2d');
+              const containerWidth = containerRef.current.clientWidth;
+              const containerHeight = containerRef.current.clientHeight;
               
-              // Right eye position (simulated)
-              const rightEyeX = containerWidth * 0.65;
-              const rightEyeY = containerHeight * 0.4;
-              
-              // Draw eye detection indicators
-              drawEyeIndicator(ctx, leftEyeX, leftEyeY);
-              drawEyeIndicator(ctx, rightEyeX, rightEyeY);
+              if (ctx) {
+                // Clear previous frames
+                ctx.clearRect(0, 0, containerWidth, containerHeight);
+                
+                // Calculate center point of each eye
+                const leftEyeCenter = {
+                  x: leftEye.reduce((sum, pt) => sum + pt.x, 0) / leftEye.length,
+                  y: leftEye.reduce((sum, pt) => sum + pt.y, 0) / leftEye.length
+                };
+                
+                const rightEyeCenter = {
+                  x: rightEye.reduce((sum, pt) => sum + pt.x, 0) / rightEye.length,
+                  y: rightEye.reduce((sum, pt) => sum + pt.y, 0) / rightEye.length
+                };
+                
+                // Scale coordinates to canvas size
+                const scaleX = containerWidth / videoRef.current.videoWidth;
+                const scaleY = containerHeight / videoRef.current.videoHeight;
+                
+                const scaledLeftEye = {
+                  x: leftEyeCenter.x * scaleX,
+                  y: leftEyeCenter.y * scaleY
+                };
+                
+                const scaledRightEye = {
+                  x: rightEyeCenter.x * scaleX,
+                  y: rightEyeCenter.y * scaleY
+                };
+                
+                // Draw eye detection indicators
+                drawEyeIndicator(ctx, scaledLeftEye.x, scaledLeftEye.y);
+                drawEyeIndicator(ctx, scaledRightEye.x, scaledRightEye.y);
+              }
+            }
+          } else {
+            // No face detected
+            onEyeDetected(false, false);
+            
+            if (canvasRef.current && containerRef.current) {
+              const ctx = canvasRef.current.getContext('2d');
+              if (ctx) {
+                ctx.clearRect(0, 0, containerRef.current.clientWidth, containerRef.current.clientHeight);
+              }
             }
           }
+        } catch (err) {
+          console.error('Error during face detection:', err);
+          onEyeDetected(false, false);
         }
       }
       
-      animationId = requestAnimationFrame(simulateEyeDetection);
+      animationId = requestAnimationFrame(trackEyes);
     };
     
-    simulateEyeDetection();
+    trackEyes();
     
     return () => {
       cancelAnimationFrame(animationId);
     };
-  }, [cameraReady, onEyeDetected, showGuides]);
+  }, [cameraReady, modelsLoaded, onEyeDetected, showGuides]);
   
   // Keep canvas size synced with container
   useEffect(() => {
@@ -175,10 +257,16 @@ const CameraView = ({ onEyeDetected, showGuides = true }: CameraViewProps) => {
           />
           <canvas 
             ref={canvasRef}
-            className="camera-overlay animate-fade-in"
-            width="1280" 
-            height="720"
+            className="camera-overlay absolute top-0 left-0 w-full h-full animate-fade-in pointer-events-none"
           />
+          {!modelsLoaded && cameraReady && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/70">
+              <div className="text-center p-4">
+                <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mb-4 mx-auto"></div>
+                <p className="text-white">Cargando modelos de detección facial...</p>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>
