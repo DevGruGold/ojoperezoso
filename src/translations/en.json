@@ -1,0 +1,159 @@
+
+{
+  "header": {
+    "home": "Home",
+    "about": "About",
+    "startExercise": "Start Exercise"
+  },
+  "index": {
+    "hero": {
+      "tagline": "Train your vision with AI",
+      "title": "Correct your lazy eye with guided exercises",
+      "description": "Ojo Perezoso uses artificial intelligence to help you correct amblyopia through personalized exercises that train your brain to improve eye coordination.",
+      "startButton": "Start Exercise",
+      "learnMore": "Learn More"
+    },
+    "preview": {
+      "cameraPreview": "Camera Preview",
+      "exerciseInProgress": "Exercise in Progress",
+      "eyesDetected": "Eyes Detected",
+      "followPrompt": "Follow the dot with both eyes",
+      "pauseButton": "Pause"
+    },
+    "features": {
+      "title": "Key Features",
+      "subtitle": "Designed with the precision and attention to detail that your vision deserves",
+      "eyeDetection": {
+        "title": "AI Eye Detection",
+        "description": "Precise algorithms that track your eyes in real-time to provide personalized feedback."
+      },
+      "customExercises": {
+        "title": "Customized Exercises",
+        "description": "Routines specifically designed to strengthen eye muscles and improve brain coordination."
+      },
+      "progressTracking": {
+        "title": "Progress Tracking",
+        "description": "Monitor your improvement over time with detailed metrics and clear visualizations."
+      }
+    },
+    "testimonial": {
+      "quote": "After using Ojo Perezoso for 8 weeks, I've noticed a significant improvement in my peripheral vision and depth perception.",
+      "name": "Maria Garcia",
+      "title": "Amblyopia Patient"
+    },
+    "cta": {
+      "title": "Start correcting your vision today",
+      "description": "Dedicate just 10 minutes daily to notice significant improvements in your binocular vision",
+      "button": "Start Now"
+    },
+    "footer": {
+      "rights": "All rights reserved."
+    }
+  },
+  "about": {
+    "hero": {
+      "tagline": "About the Application",
+      "title": "What is Ojo Perezoso and how it works",
+      "description": "An innovative solution based on scientific evidence to correct amblyopia (lazy eye) through visual exercises assisted by artificial intelligence."
+    },
+    "lazyEye": {
+      "title": "What is a lazy eye?",
+      "description1": "Amblyopia, commonly known as \"lazy eye\", is an eye condition that affects approximately 3% of the world's population. It develops during childhood when the brain and one eye don't work together properly.",
+      "description2": "In this condition, the brain favors one eye over the other, which can cause vision problems in the less-used eye. Over time, the \"lazy\" eye can develop reduced vision if not properly treated.",
+      "description3": "Although amblyopia is primarily diagnosed in childhood, recent studies show that the adult brain retains the plasticity necessary to improve visual function through specific exercises.",
+      "symptoms": "Common Symptoms",
+      "symptomsList": [
+        "Blurred or reduced vision",
+        "Depth perception problems",
+        "Poor eye-hand coordination",
+        "Eyes that don't appear to work together",
+        "Head tilting or closing one eye",
+        "Visual fatigue and headaches"
+      ]
+    },
+    "howItWorks": {
+      "title": "How Ojo Perezoso Works",
+      "steps": [
+        {
+          "title": "Precise Detection",
+          "description": "The application uses the front camera to track your eyes in real-time, monitoring their movement and coordination."
+        },
+        {
+          "title": "Guided Exercises",
+          "description": "Follow specific visual targets designed to strengthen the weaker eye and improve binocular coordination."
+        },
+        {
+          "title": "Progress Tracking",
+          "description": "The application monitors and records your progress, adjusting the difficulty of exercises to optimize results."
+        }
+      ]
+    },
+    "science": {
+      "title": "Scientific Background",
+      "paragraph1": "Ojo Perezoso is based on recent scientific studies that demonstrate the effectiveness of visual exercises for amblyopia. Research shows that visual training can improve visual acuity, contrast sensitivity, and binocular function.",
+      "paragraph2": "The human brain maintains significant neuroplasticity even in adulthood, allowing the neural connections responsible for vision to reorganize and strengthen with proper training.",
+      "paragraph3": "Our exercises are designed to:",
+      "benefitsList": [
+        "Stimulate the use of the affected eye",
+        "Improve coordination between both eyes",
+        "Strengthen eye muscles",
+        "Train the brain to correctly process signals from both eyes"
+      ],
+      "note": "Note: Although Ojo Perezoso can be an effective tool to complement amblyopia treatment, we always recommend consulting with an ophthalmologist or optometrist for professional diagnosis and treatment."
+    },
+    "usage": {
+      "title": "Recommended Usage",
+      "intro": "To get the best results with Ojo Perezoso, we recommend following these guidelines:",
+      "recommendations": [
+        {
+          "title": "Daily Sessions",
+          "description": "Perform exercises for 5-10 minutes, at least once a day."
+        },
+        {
+          "title": "Suitable Environment",
+          "description": "Use the application in a well-lit space, free from distractions."
+        },
+        {
+          "title": "Correct Position",
+          "description": "Maintain a comfortable distance from the screen (approximately 40-50 cm)."
+        },
+        {
+          "title": "Gradual Progression",
+          "description": "Start with short sessions and gradually increase the duration as you feel more comfortable."
+        },
+        {
+          "title": "Necessary Breaks",
+          "description": "If you experience visual fatigue, take a break. Overexertion can be counterproductive."
+        }
+      ],
+      "important": "Important: Consistency is key to success. Results may vary depending on the severity of amblyopia and the user's age, but most people begin to notice improvements after 4-6 weeks of regular use."
+    }
+  },
+  "exercise": {
+    "instructions": {
+      "title": "Exercise Instructions",
+      "steps": [
+        "Keep your head stable and at a comfortable distance from the screen.",
+        "Follow the visual targets that will appear on screen with both eyes.",
+        "Complete the 5-minute session for best results."
+      ],
+      "startButton": "Start Exercise"
+    },
+    "controls": {
+      "back": "Back",
+      "pause": "Pause",
+      "resume": "Resume",
+      "end": "End",
+      "confirmEnd": "Are you sure you want to end the exercise?"
+    },
+    "completion": {
+      "title": "Exercise Completed!",
+      "message": "You have successfully completed a training session for your lazy eye. Consistent practice is key to seeing significant improvements.",
+      "homeButton": "Return to Home",
+      "newButton": "New Exercise"
+    }
+  },
+  "languageSelector": {
+    "label": "Language:"
+  }
+}

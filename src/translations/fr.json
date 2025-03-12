@@ -1,0 +1,159 @@
+
+{
+  "header": {
+    "home": "Accueil",
+    "about": "À propos",
+    "startExercise": "Commencer l'exercice"
+  },
+  "index": {
+    "hero": {
+      "tagline": "Entraînez votre vision avec l'IA",
+      "title": "Corrigez votre œil paresseux avec des exercices guidés",
+      "description": "Ojo Perezoso utilise l'intelligence artificielle pour vous aider à corriger l'amblyopie grâce à des exercices personnalisés qui entraînent votre cerveau à améliorer la coordination oculaire.",
+      "startButton": "Commencer l'exercice",
+      "learnMore": "En savoir plus"
+    },
+    "preview": {
+      "cameraPreview": "Aperçu de la caméra",
+      "exerciseInProgress": "Exercice en cours",
+      "eyesDetected": "Yeux détectés",
+      "followPrompt": "Suivez le point avec les deux yeux",
+      "pauseButton": "Pause"
+    },
+    "features": {
+      "title": "Caractéristiques principales",
+      "subtitle": "Conçu avec la précision et l'attention aux détails que votre vision mérite",
+      "eyeDetection": {
+        "title": "Détection oculaire par IA",
+        "description": "Algorithmes précis qui suivent vos yeux en temps réel pour fournir un retour personnalisé."
+      },
+      "customExercises": {
+        "title": "Exercices personnalisés",
+        "description": "Routines spécifiquement conçues pour renforcer les muscles oculaires et améliorer la coordination cérébrale."
+      },
+      "progressTracking": {
+        "title": "Suivi des progrès",
+        "description": "Suivez votre amélioration au fil du temps avec des métriques détaillées et des visualisations claires."
+      }
+    },
+    "testimonial": {
+      "quote": "Après avoir utilisé Ojo Perezoso pendant 8 semaines, j'ai remarqué une amélioration significative de ma vision périphérique et de ma perception de la profondeur.",
+      "name": "Maria Garcia",
+      "title": "Patiente atteinte d'amblyopie"
+    },
+    "cta": {
+      "title": "Commencez à corriger votre vision aujourd'hui",
+      "description": "Consacrez seulement 10 minutes par jour pour constater des améliorations significatives de votre vision binoculaire",
+      "button": "Commencer maintenant"
+    },
+    "footer": {
+      "rights": "Tous droits réservés."
+    }
+  },
+  "about": {
+    "hero": {
+      "tagline": "À propos de l'application",
+      "title": "Qu'est-ce qu'Ojo Perezoso et comment ça fonctionne",
+      "description": "Une solution innovante basée sur des preuves scientifiques pour corriger l'amblyopie (œil paresseux) grâce à des exercices visuels assistés par l'intelligence artificielle."
+    },
+    "lazyEye": {
+      "title": "Qu'est-ce que l'œil paresseux ?",
+      "description1": "L'amblyopie, communément appelée \"œil paresseux\", est une condition oculaire qui affecte environ 3% de la population mondiale. Elle se développe pendant l'enfance lorsque le cerveau et un œil ne travaillent pas correctement ensemble.",
+      "description2": "Dans cette condition, le cerveau favorise un œil par rapport à l'autre, ce qui peut provoquer des problèmes de vision dans l'œil moins utilisé. Avec le temps, l'œil \"paresseux\" peut développer une vision réduite s'il n'est pas traité correctement.",
+      "description3": "Bien que l'amblyopie soit principalement diagnostiquée dans l'enfance, des études récentes montrent que le cerveau adulte conserve la plasticité nécessaire pour améliorer la fonction visuelle grâce à des exercices spécifiques.",
+      "symptoms": "Symptômes courants",
+      "symptomsList": [
+        "Vision floue ou réduite",
+        "Problèmes de perception de la profondeur",
+        "Mauvaise coordination œil-main",
+        "Yeux qui ne semblent pas travailler ensemble",
+        "Inclinaison de la tête ou fermeture d'un œil",
+        "Fatigue visuelle et maux de tête"
+      ]
+    },
+    "howItWorks": {
+      "title": "Comment fonctionne Ojo Perezoso",
+      "steps": [
+        {
+          "title": "Détection précise",
+          "description": "L'application utilise la caméra frontale pour suivre vos yeux en temps réel, surveillant leur mouvement et leur coordination."
+        },
+        {
+          "title": "Exercices guidés",
+          "description": "Suivez des cibles visuelles spécifiques conçues pour renforcer l'œil plus faible et améliorer la coordination binoculaire."
+        },
+        {
+          "title": "Suivi des progrès",
+          "description": "L'application surveille et enregistre vos progrès, ajustant la difficulté des exercices pour optimiser les résultats."
+        }
+      ]
+    },
+    "science": {
+      "title": "Fondement scientifique",
+      "paragraph1": "Ojo Perezoso est basé sur des études scientifiques récentes qui démontrent l'efficacité des exercices visuels pour l'amblyopie. La recherche montre que l'entraînement visuel peut améliorer l'acuité visuelle, la sensibilité au contraste et la fonction binoculaire.",
+      "paragraph2": "Le cerveau humain maintient une neuroplasticité significative même à l'âge adulte, permettant aux connexions neuronales responsables de la vision de se réorganiser et de se renforcer avec un entraînement approprié.",
+      "paragraph3": "Nos exercices sont conçus pour :",
+      "benefitsList": [
+        "Stimuler l'utilisation de l'œil affecté",
+        "Améliorer la coordination entre les deux yeux",
+        "Renforcer les muscles oculaires",
+        "Entraîner le cerveau à traiter correctement les signaux des deux yeux"
+      ],
+      "note": "Remarque : Bien qu'Ojo Perezoso puisse être un outil efficace pour compléter le traitement de l'amblyopie, nous recommandons toujours de consulter un ophtalmologiste ou un optométriste pour un diagnostic et un traitement professionnels."
+    },
+    "usage": {
+      "title": "Utilisation recommandée",
+      "intro": "Pour obtenir les meilleurs résultats avec Ojo Perezoso, nous recommandons de suivre ces directives :",
+      "recommendations": [
+        {
+          "title": "Sessions quotidiennes",
+          "description": "Effectuez des exercices pendant 5 à 10 minutes, au moins une fois par jour."
+        },
+        {
+          "title": "Environnement adapté",
+          "description": "Utilisez l'application dans un espace bien éclairé, sans distractions."
+        },
+        {
+          "title": "Position correcte",
+          "description": "Maintenez une distance confortable de l'écran (environ 40-50 cm)."
+        },
+        {
+          "title": "Progression graduelle",
+          "description": "Commencez par des sessions courtes et augmentez progressivement la durée à mesure que vous vous sentez plus à l'aise."
+        },
+        {
+          "title": "Pauses nécessaires",
+          "description": "Si vous ressentez de la fatigue visuelle, faites une pause. La surstimulation peut être contre-productive."
+        }
+      ],
+      "important": "Important : La cohérence est la clé du succès. Les résultats peuvent varier en fonction de la gravité de l'amblyopie et de l'âge de l'utilisateur, mais la plupart des personnes commencent à remarquer des améliorations après 4 à 6 semaines d'utilisation régulière."
+    }
+  },
+  "exercise": {
+    "instructions": {
+      "title": "Instructions d'exercice",
+      "steps": [
+        "Gardez votre tête stable et à une distance confortable de l'écran.",
+        "Suivez avec les deux yeux les cibles visuelles qui apparaîtront à l'écran.",
+        "Complétez la session de 5 minutes pour de meilleurs résultats."
+      ],
+      "startButton": "Commencer l'exercice"
+    },
+    "controls": {
+      "back": "Retour",
+      "pause": "Pause",
+      "resume": "Reprendre",
+      "end": "Terminer",
+      "confirmEnd": "Êtes-vous sûr de vouloir terminer l'exercice ?"
+    },
+    "completion": {
+      "title": "Exercice terminé !",
+      "message": "Vous avez terminé avec succès une session d'entraînement pour votre œil paresseux. Une pratique constante est essentielle pour voir des améliorations significatives.",
+      "homeButton": "Retourner à l'accueil",
+      "newButton": "Nouvel exercice"
+    }
+  },
+  "languageSelector": {
+    "label": "Langue :"
+  }
+}

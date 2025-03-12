@@ -1,0 +1,159 @@
+
+{
+  "header": {
+    "home": "Início",
+    "about": "Sobre",
+    "startExercise": "Iniciar Exercício"
+  },
+  "index": {
+    "hero": {
+      "tagline": "Treine sua visão com IA",
+      "title": "Corrija seu olho preguiçoso com exercícios guiados",
+      "description": "Ojo Perezoso usa inteligência artificial para ajudar você a corrigir a ambliopia através de exercícios personalizados que treinam seu cérebro para melhorar a coordenação ocular.",
+      "startButton": "Iniciar Exercício",
+      "learnMore": "Saiba Mais"
+    },
+    "preview": {
+      "cameraPreview": "Pré-visualização da câmera",
+      "exerciseInProgress": "Exercício em andamento",
+      "eyesDetected": "Olhos detectados",
+      "followPrompt": "Siga o ponto com ambos os olhos",
+      "pauseButton": "Pausar"
+    },
+    "features": {
+      "title": "Características Principais",
+      "subtitle": "Projetado com a precisão e atenção aos detalhes que sua visão merece",
+      "eyeDetection": {
+        "title": "Detecção ocular com IA",
+        "description": "Algoritmos precisos que rastreiam seus olhos em tempo real para fornecer feedback personalizado."
+      },
+      "customExercises": {
+        "title": "Exercícios personalizados",
+        "description": "Rotinas especificamente projetadas para fortalecer os músculos oculares e melhorar a coordenação cerebral."
+      },
+      "progressTracking": {
+        "title": "Acompanhamento de progresso",
+        "description": "Monitore sua melhoria ao longo do tempo com métricas detalhadas e visualizações claras."
+      }
+    },
+    "testimonial": {
+      "quote": "Depois de usar o Ojo Perezoso por 8 semanas, notei uma melhoria significativa na minha visão periférica e percepção de profundidade.",
+      "name": "Maria Garcia",
+      "title": "Paciente com ambliopia"
+    },
+    "cta": {
+      "title": "Comece a corrigir sua visão hoje",
+      "description": "Dedique apenas 10 minutos diários para notar melhorias significativas em sua visão binocular",
+      "button": "Começar Agora"
+    },
+    "footer": {
+      "rights": "Todos os direitos reservados."
+    }
+  },
+  "about": {
+    "hero": {
+      "tagline": "Sobre o aplicativo",
+      "title": "O que é o Ojo Perezoso e como funciona",
+      "description": "Uma solução inovadora baseada em evidências científicas para corrigir a ambliopia (olho preguiçoso) através de exercícios visuais assistidos por inteligência artificial."
+    },
+    "lazyEye": {
+      "title": "O que é olho preguiçoso?",
+      "description1": "A ambliopia, comumente conhecida como \"olho preguiçoso\", é uma condição ocular que afeta aproximadamente 3% da população mundial. Desenvolve-se durante a infância quando o cérebro e um olho não trabalham juntos adequadamente.",
+      "description2": "Nesta condição, o cérebro favorece um olho em detrimento do outro, o que pode causar problemas de visão no olho menos utilizado. Com o tempo, o olho \"preguiçoso\" pode desenvolver visão reduzida se não for tratado adequadamente.",
+      "description3": "Embora a ambliopia seja diagnosticada principalmente na infância, estudos recentes mostram que o cérebro adulto mantém a plasticidade necessária para melhorar a função visual através de exercícios específicos.",
+      "symptoms": "Sintomas comuns",
+      "symptomsList": [
+        "Visão turva ou reduzida",
+        "Problemas de percepção de profundidade",
+        "Má coordenação olho-mão",
+        "Olhos que não parecem trabalhar juntos",
+        "Inclinação da cabeça ou fechamento de um olho",
+        "Fadiga visual e dores de cabeça"
+      ]
+    },
+    "howItWorks": {
+      "title": "Como o Ojo Perezoso funciona",
+      "steps": [
+        {
+          "title": "Detecção precisa",
+          "description": "O aplicativo usa a câmera frontal para rastrear seus olhos em tempo real, monitorando seu movimento e coordenação."
+        },
+        {
+          "title": "Exercícios guiados",
+          "description": "Siga alvos visuais específicos projetados para fortalecer o olho mais fraco e melhorar a coordenação binocular."
+        },
+        {
+          "title": "Acompanhamento de progresso",
+          "description": "O aplicativo monitora e registra seu progresso, ajustando a dificuldade dos exercícios para otimizar os resultados."
+        }
+      ]
+    },
+    "science": {
+      "title": "Fundamentação científica",
+      "paragraph1": "O Ojo Perezoso é baseado em estudos científicos recentes que demonstram a eficácia dos exercícios visuais para ambliopia. A pesquisa mostra que o treinamento visual pode melhorar a acuidade visual, a sensibilidade ao contraste e a função binocular.",
+      "paragraph2": "O cérebro humano mantém uma neuroplasticidade significativa mesmo na idade adulta, permitindo que as conexões neurais responsáveis pela visão se reorganizem e fortaleçam com o treinamento adequado.",
+      "paragraph3": "Nossos exercícios são projetados para:",
+      "benefitsList": [
+        "Estimular o uso do olho afetado",
+        "Melhorar a coordenação entre ambos os olhos",
+        "Fortalecer os músculos oculares",
+        "Treinar o cérebro para processar corretamente os sinais de ambos os olhos"
+      ],
+      "note": "Nota: Embora o Ojo Perezoso possa ser uma ferramenta eficaz para complementar o tratamento da ambliopia, sempre recomendamos consultar um oftalmologista ou optometrista para diagnóstico e tratamento profissionais."
+    },
+    "usage": {
+      "title": "Uso recomendado",
+      "intro": "Para obter os melhores resultados com o Ojo Perezoso, recomendamos seguir estas diretrizes:",
+      "recommendations": [
+        {
+          "title": "Sessões diárias",
+          "description": "Realize exercícios por 5-10 minutos, pelo menos uma vez por dia."
+        },
+        {
+          "title": "Ambiente adequado",
+          "description": "Use o aplicativo em um espaço bem iluminado, livre de distrações."
+        },
+        {
+          "title": "Posição correta",
+          "description": "Mantenha uma distância confortável da tela (aproximadamente 40-50 cm)."
+        },
+        {
+          "title": "Progressão gradual",
+          "description": "Comece com sessões curtas e aumente gradualmente a duração conforme se sentir mais confortável."
+        },
+        {
+          "title": "Pausas necessárias",
+          "description": "Se você sentir fadiga visual, faça uma pausa. O esforço excessivo pode ser contraproducente."
+        }
+      ],
+      "important": "Importante: A consistência é a chave para o sucesso. Os resultados podem variar dependendo da gravidade da ambliopia e da idade do usuário, mas a maioria das pessoas começa a notar melhorias após 4-6 semanas de uso regular."
+    }
+  },
+  "exercise": {
+    "instructions": {
+      "title": "Instruções do exercício",
+      "steps": [
+        "Mantenha sua cabeça estável e a uma distância confortável da tela.",
+        "Siga com ambos os olhos os alvos visuais que aparecerão na tela.",
+        "Complete a sessão de 5 minutos para obter melhores resultados."
+      ],
+      "startButton": "Iniciar exercício"
+    },
+    "controls": {
+      "back": "Voltar",
+      "pause": "Pausar",
+      "resume": "Retomar",
+      "end": "Finalizar",
+      "confirmEnd": "Tem certeza de que deseja finalizar o exercício?"
+    },
+    "completion": {
+      "title": "Exercício concluído!",
+      "message": "Você completou com sucesso uma sessão de treinamento para seu olho preguiçoso. A prática consistente é fundamental para ver melhorias significativas.",
+      "homeButton": "Voltar ao início",
+      "newButton": "Novo exercício"
+    }
+  },
+  "languageSelector": {
+    "label": "Idioma:"
+  }
+}

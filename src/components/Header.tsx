@@ -3,10 +3,13 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import Button from './Button';
+import LanguageToggle from './LanguageToggle';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { t } = useLanguage();
   
   // Update scroll state for glass effect
   useEffect(() => {
@@ -41,13 +44,14 @@ const Header = () => {
         </Link>
         
         <nav className="hidden md:flex items-center space-x-8">
-          <NavLink to="/" current={location.pathname === '/'}>Inicio</NavLink>
-          <NavLink to="/about" current={location.pathname === '/about'}>Acerca de</NavLink>
+          <NavLink to="/" current={location.pathname === '/'}>{t('header.home')}</NavLink>
+          <NavLink to="/about" current={location.pathname === '/about'}>{t('header.about')}</NavLink>
         </nav>
         
         <div className="flex items-center space-x-4">
+          <LanguageToggle />
           <Link to="/exercise">
-            <Button>Comenzar ejercicio</Button>
+            <Button>{t('header.startExercise')}</Button>
           </Link>
         </div>
       </div>

@@ -1,0 +1,159 @@
+
+{
+  "header": {
+    "home": "Startseite",
+    "about": "Über uns",
+    "startExercise": "Übung starten"
+  },
+  "index": {
+    "hero": {
+      "tagline": "Trainieren Sie Ihre Sehkraft mit KI",
+      "title": "Korrigieren Sie Ihr faules Auge mit geführten Übungen",
+      "description": "Ojo Perezoso nutzt künstliche Intelligenz, um Ihnen bei der Korrektur von Amblyopie durch personalisierte Übungen zu helfen, die Ihr Gehirn trainieren, um die Augenkoordination zu verbessern.",
+      "startButton": "Übung starten",
+      "learnMore": "Mehr erfahren"
+    },
+    "preview": {
+      "cameraPreview": "Kamera-Vorschau",
+      "exerciseInProgress": "Übung im Gange",
+      "eyesDetected": "Augen erkannt",
+      "followPrompt": "Folgen Sie dem Punkt mit beiden Augen",
+      "pauseButton": "Pause"
+    },
+    "features": {
+      "title": "Hauptfunktionen",
+      "subtitle": "Entwickelt mit der Präzision und Aufmerksamkeit für Details, die Ihre Sehkraft verdient",
+      "eyeDetection": {
+        "title": "KI-Augenerkennung",
+        "description": "Präzise Algorithmen, die Ihre Augen in Echtzeit verfolgen, um personalisiertes Feedback zu geben."
+      },
+      "customExercises": {
+        "title": "Personalisierte Übungen",
+        "description": "Routinen, die speziell entwickelt wurden, um die Augenmuskeln zu stärken und die Gehirnkoordination zu verbessern."
+      },
+      "progressTracking": {
+        "title": "Fortschrittsverfolgung",
+        "description": "Überwachen Sie Ihre Verbesserung im Laufe der Zeit mit detaillierten Metriken und klaren Visualisierungen."
+      }
+    },
+    "testimonial": {
+      "quote": "Nach 8 Wochen Nutzung von Ojo Perezoso habe ich eine signifikante Verbesserung meines peripheren Sehens und der Tiefenwahrnehmung festgestellt.",
+      "name": "Maria Garcia",
+      "title": "Amblyopie-Patientin"
+    },
+    "cta": {
+      "title": "Beginnen Sie noch heute mit der Korrektur Ihrer Sehkraft",
+      "description": "Widmen Sie täglich nur 10 Minuten, um signifikante Verbesserungen Ihres binokularen Sehens zu bemerken",
+      "button": "Jetzt beginnen"
+    },
+    "footer": {
+      "rights": "Alle Rechte vorbehalten."
+    }
+  },
+  "about": {
+    "hero": {
+      "tagline": "Über die Anwendung",
+      "title": "Was ist Ojo Perezoso und wie es funktioniert",
+      "description": "Eine innovative Lösung basierend auf wissenschaftlichen Erkenntnissen zur Korrektur von Amblyopie (faules Auge) durch von künstlicher Intelligenz unterstützte visuelle Übungen."
+    },
+    "lazyEye": {
+      "title": "Was ist ein faules Auge?",
+      "description1": "Amblyopie, allgemein bekannt als \"faules Auge\", ist eine Augenerkrankung, die etwa 3% der Weltbevölkerung betrifft. Sie entwickelt sich während der Kindheit, wenn das Gehirn und ein Auge nicht richtig zusammenarbeiten.",
+      "description2": "Bei dieser Erkrankung bevorzugt das Gehirn ein Auge gegenüber dem anderen, was zu Sehproblemen im weniger benutzten Auge führen kann. Mit der Zeit kann das \"faule\" Auge eine verminderte Sehkraft entwickeln, wenn es nicht richtig behandelt wird.",
+      "description3": "Obwohl Amblyopie hauptsächlich in der Kindheit diagnostiziert wird, zeigen neuere Studien, dass das erwachsene Gehirn die notwendige Plastizität beibehält, um die Sehfunktion durch spezifische Übungen zu verbessern.",
+      "symptoms": "Häufige Symptome",
+      "symptomsList": [
+        "Verschwommene oder verminderte Sicht",
+        "Probleme mit der Tiefenwahrnehmung",
+        "Schlechte Auge-Hand-Koordination",
+        "Augen, die nicht zusammenzuarbeiten scheinen",
+        "Kopfneigung oder Schließen eines Auges",
+        "Visuelle Ermüdung und Kopfschmerzen"
+      ]
+    },
+    "howItWorks": {
+      "title": "Wie Ojo Perezoso funktioniert",
+      "steps": [
+        {
+          "title": "Präzise Erkennung",
+          "description": "Die Anwendung nutzt die Frontkamera, um Ihre Augen in Echtzeit zu verfolgen und dabei ihre Bewegung und Koordination zu überwachen."
+        },
+        {
+          "title": "Geführte Übungen",
+          "description": "Folgen Sie spezifischen visuellen Zielen, die entwickelt wurden, um das schwächere Auge zu stärken und die binokulare Koordination zu verbessern."
+        },
+        {
+          "title": "Fortschrittsverfolgung",
+          "description": "Die Anwendung überwacht und zeichnet Ihren Fortschritt auf und passt den Schwierigkeitsgrad der Übungen an, um die Ergebnisse zu optimieren."
+        }
+      ]
+    },
+    "science": {
+      "title": "Wissenschaftlicher Hintergrund",
+      "paragraph1": "Ojo Perezoso basiert auf neueren wissenschaftlichen Studien, die die Wirksamkeit von Sehübungen bei Amblyopie belegen. Forschungen zeigen, dass visuelles Training die Sehschärfe, die Kontrastempfindlichkeit und die binokulare Funktion verbessern kann.",
+      "paragraph2": "Das menschliche Gehirn behält eine signifikante Neuroplastizität auch im Erwachsenenalter bei, was es den für das Sehen verantwortlichen neuronalen Verbindungen ermöglicht, sich mit entsprechendem Training neu zu organisieren und zu stärken.",
+      "paragraph3": "Unsere Übungen sind entwickelt, um:",
+      "benefitsList": [
+        "Die Nutzung des betroffenen Auges zu stimulieren",
+        "Die Koordination zwischen beiden Augen zu verbessern",
+        "Die Augenmuskeln zu stärken",
+        "Das Gehirn zu trainieren, Signale von beiden Augen korrekt zu verarbeiten"
+      ],
+      "note": "Hinweis: Obwohl Ojo Perezoso ein wirksames Instrument zur Ergänzung der Amblyopie-Behandlung sein kann, empfehlen wir immer die Konsultation eines Augenarztes oder Optometristen für eine professionelle Diagnose und Behandlung."
+    },
+    "usage": {
+      "title": "Empfohlene Nutzung",
+      "intro": "Um die besten Ergebnisse mit Ojo Perezoso zu erzielen, empfehlen wir, diese Richtlinien zu befolgen:",
+      "recommendations": [
+        {
+          "title": "Tägliche Sitzungen",
+          "description": "Führen Sie Übungen für 5-10 Minuten durch, mindestens einmal täglich."
+        },
+        {
+          "title": "Geeignete Umgebung",
+          "description": "Verwenden Sie die Anwendung in einem gut beleuchteten Raum ohne Ablenkungen."
+        },
+        {
+          "title": "Korrekte Position",
+          "description": "Halten Sie einen angenehmen Abstand zum Bildschirm (ca. 40-50 cm)."
+        },
+        {
+          "title": "Schrittweise Steigerung",
+          "description": "Beginnen Sie mit kurzen Sitzungen und erhöhen Sie allmählich die Dauer, wenn Sie sich wohler fühlen."
+        },
+        {
+          "title": "Notwendige Pausen",
+          "description": "Wenn Sie visuelle Ermüdung verspüren, machen Sie eine Pause. Überanstrengung kann kontraproduktiv sein."
+        }
+      ],
+      "important": "Wichtig: Konsequenz ist der Schlüssel zum Erfolg. Die Ergebnisse können je nach Schweregrad der Amblyopie und dem Alter des Benutzers variieren, aber die meisten Menschen beginnen nach 4-6 Wochen regelmäßiger Anwendung Verbesserungen zu bemerken."
+    }
+  },
+  "exercise": {
+    "instructions": {
+      "title": "Übungsanleitung",
+      "steps": [
+        "Halten Sie Ihren Kopf stabil und in einem angenehmen Abstand zum Bildschirm.",
+        "Folgen Sie mit beiden Augen den visuellen Zielen, die auf dem Bildschirm erscheinen werden.",
+        "Absolvieren Sie die 5-minütige Sitzung für beste Ergebnisse."
+      ],
+      "startButton": "Übung starten"
+    },
+    "controls": {
+      "back": "Zurück",
+      "pause": "Pause",
+      "resume": "Fortsetzen",
+      "end": "Beenden",
+      "confirmEnd": "Sind Sie sicher, dass Sie die Übung beenden möchten?"
+    },
+    "completion": {
+      "title": "Übung abgeschlossen!",
+      "message": "Sie haben erfolgreich eine Trainingseinheit für Ihr faules Auge abgeschlossen. Konsequente Übung ist der Schlüssel, um signifikante Verbesserungen zu sehen.",
+      "homeButton": "Zurück zur Startseite",
+      "newButton": "Neue Übung"
+    }
+  },
+  "languageSelector": {
+    "label": "Sprache:"
+  }
+}
