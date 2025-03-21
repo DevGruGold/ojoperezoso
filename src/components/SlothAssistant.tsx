@@ -152,14 +152,16 @@ const SlothAssistant: React.FC<SlothAssistantProps> = ({ message }) => {
             />
           </svg>
           
-          {/* Add keyframe animation for arm waving */}
-          <style jsx>{`
-            @keyframes wave {
-              0% { transform: rotate(0deg); }
-              50% { transform: rotate(10deg); }
-              100% { transform: rotate(0deg); }
-            }
-          `}</style>
+          {/* Add keyframe animation for arm waving - fixed JSX issue */}
+          <style dangerouslySetInnerHTML={{
+            __html: `
+              @keyframes wave {
+                0% { transform: rotate(0deg); }
+                50% { transform: rotate(10deg); }
+                100% { transform: rotate(0deg); }
+              }
+            `
+          }} />
         </div>
       </div>
       

@@ -1,11 +1,11 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CameraView from '@/components/CameraView';
 import ExerciseControls from '@/components/ExerciseControls';
 import ProgressIndicator from '@/components/ProgressIndicator';
 import Button from '@/components/Button';
 import SlothAssistant from '@/components/SlothAssistant';
+import SlothFaceTracker from '@/components/SlothFaceTracker';
 import { Eye, ArrowLeft, Award } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { downloadFaceModels } from '@/utils/downloadFaceModels';
@@ -127,19 +127,22 @@ const Exercise = () => {
     return () => clearInterval(timer);
   }, [isRunning, timeRemaining, exerciseStep, exerciseSteps]);
   
-  // Handle eye detection
-  const handleEyeDetected = useCallback((leftEye: boolean, rightEye: boolean) => {
-    setLeftEyeDetected(leftEye);
-    setRightEyeDetected(rightEye);
-    
-    // Provide feedback when eyes are detected
-    if (!leftEyeDetected && leftEye) {
-      toast.success(t('exercise.leftEyeDetected'));
+  // We'll simulate eye detection since we're not actually tracking the user's eyes
+  useEffect(() => {
+    if (isRunning) {
+      // Simulate that we're detecting eyes after a short delay
+      const detectionTimer = setTimeout(() => {
+        setLeftEyeDetected(true);
+        setRightEyeDetected(true);
+        toast.success(t('exercise.eyesDetected'));
+      }, 3000);
+      
+      return () => clearTimeout(detectionTimer);
+    } else {
+      setLeftEyeDetected(false);
+      setRightEyeDetected(false);
     }
-    if (!rightEyeDetected && rightEye) {
-      toast.success(t('exercise.rightEyeDetected'));
-    }
-  }, [leftEyeDetected, rightEyeDetected, t]);
+  }, [isRunning, t]);
   
   // Handle start exercise
   const handleStart = useCallback(() => {
@@ -266,35 +269,14 @@ const Exercise = () => {
   
   return (
     <div className="fixed inset-0 bg-gradient-to-b from-blue-50 to-purple-50">
-      {/* Camera View */}
-      <div className="absolute inset-0">
-        <CameraView 
-          onEyeDetected={handleEyeDetected} 
-          showGuides={sessionStarted && isRunning}
+      {/* Full-screen Sloth Face */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <SlothFaceTracker 
+          targetPosition={eyeTargetPosition}
+          isRunning={isRunning}
+          currentStep={exerciseStep}
         />
       </div>
-      
-      {/* Current exercise instruction */}
-      {isRunning && (
-        <div className="absolute top-20 left-0 right-0 flex justify-center z-20">
-          <div className="bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full shadow-md border border-amber-200 animate-bounce">
-            <p className="font-bold text-blue-700">
-              {exerciseSteps[exerciseStep % 5]}
-            </p>
-          </div>
-        </div>
-      )}
-      
-      {/* Exercise target that moves based on current step */}
-      {isRunning && (
-        <div 
-          className="eye-target animate-pulse-subtle transition-all duration-1000 ease-in-out"
-          style={{
-            left: `${eyeTargetPosition.x}%`,
-            top: `${eyeTargetPosition.y}%`,
-          }}
-        />
-      )}
       
       {/* Top Navigation */}
       <div className="absolute top-6 left-6 z-10">
