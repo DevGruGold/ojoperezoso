@@ -5,9 +5,11 @@ import Header from '@/components/Header';
 import Button from '@/components/Button';
 import { cn } from '@/lib/utils';
 import { Eye } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Index = () => {
   const featuresRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
   
   // Simple intersection observer to trigger animations
   useEffect(() => {
@@ -42,27 +44,26 @@ const Index = () => {
         <div className="max-w-5xl mx-auto text-center">
           <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-primary/10 text-primary mb-6 animate-fade-in">
             <Eye className="w-4 h-4 mr-2" />
-            <span className="text-sm font-medium">Entrena tu visión con IA</span>
+            <span className="text-sm font-medium">{t('index.hero.tagline')}</span>
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-slide-up">
-            Corrige tu ojo perezoso con ejercicios guiados
+            {t('index.hero.title')}
           </h1>
           
           <p className="text-lg md:text-xl text-foreground/80 max-w-3xl mx-auto mb-10 animate-slide-up">
-            Ojo Perezoso utiliza inteligencia artificial para ayudarte a corregir la ambliopía
-            mediante ejercicios personalizados que entrenan tu cerebro para mejorar la coordinación ocular.
+            {t('index.hero.description')}
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up">
             <Link to="/exercise">
               <Button size="lg">
-                Comenzar ejercicio
+                {t('index.hero.startButton')}
               </Button>
             </Link>
             <Link to="/about">
               <Button variant="secondary" size="lg">
-                Aprender más
+                {t('index.hero.learnMore')}
               </Button>
             </Link>
           </div>
@@ -78,14 +79,14 @@ const Index = () => {
               <div className="absolute inset-0 bg-gradient-to-br from-black via-black/90 to-black/80 flex items-center justify-center">
                 <div className="text-white text-center">
                   <Eye className="w-20 h-20 mx-auto mb-4 text-primary/80" />
-                  <p className="text-white/60 text-lg">Vista previa de la cámara</p>
+                  <p className="text-white/60 text-lg">{t('index.preview.cameraPreview')}</p>
                 </div>
               </div>
               
               {/* Overlay UI elements */}
               <div className="absolute bottom-8 left-0 right-0 flex justify-center">
                 <div className="glass px-8 py-6 rounded-xl max-w-md">
-                  <h3 className="text-lg font-medium mb-4">Ejercicio en progreso</h3>
+                  <h3 className="text-lg font-medium mb-4">{t('index.preview.exerciseInProgress')}</h3>
                   
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center">
@@ -93,12 +94,12 @@ const Index = () => {
                         <Eye className="w-5 h-5 text-green-600" />
                       </div>
                       <div className="text-sm">
-                        <p className="font-medium">Ojos detectados</p>
-                        <p className="text-foreground/60 text-xs">Sigue el punto con ambos ojos</p>
+                        <p className="font-medium">{t('index.preview.eyesDetected')}</p>
+                        <p className="text-foreground/60 text-xs">{t('index.preview.followPrompt')}</p>
                       </div>
                     </div>
                     
-                    <Button size="sm">Pausar</Button>
+                    <Button size="sm">{t('index.preview.pauseButton')}</Button>
                   </div>
                   
                   <div className="w-full h-1.5 bg-white/20 rounded-full overflow-hidden">
@@ -115,29 +116,34 @@ const Index = () => {
       <section className="py-20 px-6" ref={featuresRef}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Características principales</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('index.features.title')}</h2>
             <p className="text-lg text-foreground/80 max-w-3xl mx-auto">
-              Diseñado con la precisión y atención al detalle que tu visión merece
+              {t('index.features.subtitle')}
             </p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <div 
-                key={index} 
-                className="feature-card opacity-0 translate-y-10 bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300"
-                style={{ transitionDelay: `${index * 100}ms` }}
-              >
-                <div className={cn(
-                  "w-12 h-12 rounded-xl flex items-center justify-center mb-4",
-                  feature.iconBgColor
-                )}>
-                  {feature.icon}
-                </div>
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-foreground/80">{feature.description}</p>
-              </div>
-            ))}
+            <FeatureCard 
+              index={0}
+              title={t('index.features.eyeDetection.title')}
+              description={t('index.features.eyeDetection.description')}
+              icon={<Eye className="w-6 h-6 text-primary" />}
+              iconBgColor="bg-primary/10"
+            />
+            <FeatureCard 
+              index={1}
+              title={t('index.features.customExercises.title')}
+              description={t('index.features.customExercises.description')}
+              icon={<Eye className="w-6 h-6 text-primary" />}
+              iconBgColor="bg-primary/10"
+            />
+            <FeatureCard 
+              index={2}
+              title={t('index.features.progressTracking.title')}
+              description={t('index.features.progressTracking.description')}
+              icon={<Eye className="w-6 h-6 text-primary" />}
+              iconBgColor="bg-primary/10"
+            />
           </div>
         </div>
       </section>
@@ -147,13 +153,13 @@ const Index = () => {
         <div className="max-w-4xl mx-auto text-center">
           <div className="animate-fade-in">
             <p className="text-xl md:text-2xl font-medium italic mb-8">
-              "Después de usar Ojo Perezoso durante 8 semanas, he notado una mejora significativa en mi visión periférica y profundidad."
+              "{t('index.testimonial.quote')}"
             </p>
             <div className="flex items-center justify-center">
               <div className="w-12 h-12 bg-primary/20 rounded-full" />
               <div className="ml-4 text-left">
-                <p className="font-semibold">María García</p>
-                <p className="text-sm text-foreground/70">Paciente de ambliopía</p>
+                <p className="font-semibold">{t('index.testimonial.name')}</p>
+                <p className="text-sm text-foreground/70">{t('index.testimonial.title')}</p>
               </div>
             </div>
           </div>
@@ -164,15 +170,15 @@ const Index = () => {
       <section className="py-20 px-6 bg-white">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6 animate-slide-up">
-            Empieza a corregir tu visión hoy
+            {t('index.cta.title')}
           </h2>
           <p className="text-lg text-foreground/80 max-w-3xl mx-auto mb-10 animate-slide-up">
-            Dedica solo 10 minutos diarios para notar mejoras significativas en tu visión binocular
+            {t('index.cta.description')}
           </p>
           <div className="animate-slide-up">
             <Link to="/exercise">
               <Button size="lg">
-                Comenzar ahora
+                {t('index.cta.button')}
               </Button>
             </Link>
           </div>
@@ -190,7 +196,7 @@ const Index = () => {
           </div>
           
           <div className="text-sm text-foreground/60">
-            © {new Date().getFullYear()} Ojo Perezoso. Todos los derechos reservados.
+            © {new Date().getFullYear()} Ojo Perezoso. {t('index.footer.rights')}
           </div>
         </div>
       </footer>
@@ -198,26 +204,29 @@ const Index = () => {
   );
 };
 
-// Feature data
-const features = [
-  {
-    title: 'Detección ocular con IA',
-    description: 'Algoritmos precisos que rastrean tus ojos en tiempo real para proporcionar retroalimentación personalizada.',
-    icon: <Eye className="w-6 h-6 text-primary" />,
-    iconBgColor: 'bg-primary/10'
-  },
-  {
-    title: 'Ejercicios personalizados',
-    description: 'Rutinas diseñadas específicamente para fortalecer los músculos oculares y mejorar la coordinación cerebral.',
-    icon: <Eye className="w-6 h-6 text-primary" />,
-    iconBgColor: 'bg-primary/10'
-  },
-  {
-    title: 'Seguimiento de progreso',
-    description: 'Monitorea tu mejora a lo largo del tiempo con métricas detalladas y visualizaciones claras.',
-    icon: <Eye className="w-6 h-6 text-primary" />,
-    iconBgColor: 'bg-primary/10'
-  }
-];
+// Separate feature card component to improve readability
+interface FeatureCardProps {
+  index: number;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  iconBgColor: string;
+}
+
+const FeatureCard = ({ index, title, description, icon, iconBgColor }: FeatureCardProps) => (
+  <div 
+    className="feature-card opacity-0 translate-y-10 bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300"
+    style={{ transitionDelay: `${index * 100}ms` }}
+  >
+    <div className={cn(
+      "w-12 h-12 rounded-xl flex items-center justify-center mb-4",
+      iconBgColor
+    )}>
+      {icon}
+    </div>
+    <h3 className="text-xl font-semibold mb-2">{title}</h3>
+    <p className="text-foreground/80">{description}</p>
+  </div>
+);
 
 export default Index;
