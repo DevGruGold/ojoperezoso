@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    --background: 210 50% 98%;
+    --background: 48 100% 97%;
     --foreground: 220 20% 20%;
 
     --card: 0 0% 100%;
@@ -14,16 +14,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 20% 20%;
 
-    --primary: 210 100% 50%;
+    --primary: 207 90% 54%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 220 15% 94%;
+    --secondary: 47 100% 96%;
     --secondary-foreground: 220 20% 20%;
 
     --muted: 220 15% 94%;
     --muted-foreground: 220 10% 50%;
 
-    --accent: 210 100% 50%;
+    --accent: 37 90% 55%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84.2% 60.2%;
@@ -33,7 +33,7 @@
     --input: 220 15% 90%;
     --ring: 210 100% 50%;
 
-    --radius: 1rem;
+    --radius: 1.5rem;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -52,8 +52,12 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-gradient-to-b from-amber-50 to-blue-50 text-foreground font-sans antialiased min-h-screen;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
   }
 }
 
@@ -63,7 +67,7 @@
   }
   
   .glass {
-    @apply backdrop-blur-md bg-white/80 border border-white/20 shadow-sm;
+    @apply backdrop-blur-md bg-white/90 border border-white/40 shadow-sm;
   }
   
   .glass-dark {
@@ -94,6 +98,57 @@
   .eye-target::after {
     content: '';
     @apply w-4 h-4 rounded-full bg-primary/50 absolute;
+  }
+
+  .kid-button {
+    @apply rounded-full bg-gradient-to-r from-blue-400 to-purple-500 text-white font-bold shadow-md transition-all hover:shadow-lg hover:scale-105;
+  }
+
+  .kid-card {
+    @apply rounded-3xl bg-white border-2 border-amber-200 shadow-md hover:shadow-lg transition-all;
+  }
+
+  .kid-icon {
+    @apply text-amber-500;
+  }
+
+  .bouncy {
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .floating {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+
+  .wiggle {
+    animation: wiggle 2.5s ease-in-out infinite;
+  }
+
+  @keyframes wiggle {
+    0%, 100% {
+      transform: rotate(-3deg);
+    }
+    50% {
+      transform: rotate(3deg);
+    }
   }
 }
 
@@ -128,4 +183,14 @@ button, a {
 /* Remove browser defaults */
 video::-webkit-media-controls {
   display: none !important;
+}
+
+/* Kid-friendly fonts */
+h1, h2, h3 {
+  @apply text-blue-700;
+}
+
+/* Button overrides for kid-friendly look */
+.kid-friendly-button {
+  @apply rounded-full bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white py-3 px-8 font-bold shadow-lg hover:shadow-xl transition-all duration-300;
 }

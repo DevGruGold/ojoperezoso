@@ -2,7 +2,9 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import Button from './Button';
-import { Eye, EyeOff, Play, Pause, X } from 'lucide-react';
+import { Eye, EyeOff, Play, Pause, X, AlertTriangle } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import SlothAssistant from './SlothAssistant';
 
 interface ExerciseControlsProps {
   onStart: () => void;
@@ -28,6 +30,8 @@ const ExerciseControls = ({
   timeRemaining
 }: ExerciseControlsProps) => {
   const [animateTimeRemaining, setAnimateTimeRemaining] = useState(false);
+  const [showSlothMessage, setShowSlothMessage] = useState(true);
+  const { t } = useLanguage();
   
   // Animate time remaining when it changes
   useEffect(() => {
@@ -42,15 +46,45 @@ const ExerciseControls = ({
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
+
+  // Get sloth message based on the exercise state
+  const getSlothMessage = () => {
+    if (!isRunning) {
+      return t('exercise.sloth.start');
+    }
+    
+    if (!leftEyeDetected && !rightEyeDetected) {
+      return t('exercise.sloth.noEyesDetected');
+    }
+    
+    if (timeRemaining < 30) {
+      return t('exercise.sloth.almostDone');
+    }
+    
+    return t('exercise.sloth.keepGoing');
+  };
   
   return (
-    <div className="w-full max-w-lg mx-auto glass px-8 py-6 rounded-2xl animate-slide-up">
+    <div className="w-full max-w-lg mx-auto glass px-8 py-6 rounded-2xl animate-slide-up bg-white/80 border-2 border-amber-200 shadow-lg">
+      {/* Sloth Assistant */}
+      {showSlothMessage && (
+        <div className="mb-6">
+          <SlothAssistant message={getSlothMessage()} />
+          <button 
+            onClick={() => setShowSlothMessage(false)} 
+            className="text-xs text-slate-500 hover:text-slate-700 mt-2 underline"
+          >
+            {t('exercise.sloth.dismiss')}
+          </button>
+        </div>
+      )}
+
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-medium">Ejercicio {currentExercise}/{totalExercises}</h2>
+        <h2 className="text-lg font-medium">{t('exercise.title', { current: currentExercise, total: totalExercises })}</h2>
         <button 
           onClick={onEnd}
           className="p-1.5 rounded-full hover:bg-secondary/80 transition-colors"
-          aria-label="Cerrar ejercicio"
+          aria-label={t('exercise.close')}
         >
           <X className="w-5 h-5" />
         </button>
@@ -60,39 +94,41 @@ const ExerciseControls = ({
         <div className="flex flex-col items-center">
           <div className={cn(
             "w-14 h-14 rounded-full mb-2 flex items-center justify-center",
-            leftEyeDetected ? "bg-green-100" : "bg-red-100"
+            leftEyeDetected ? "bg-green-100" : "bg-amber-100"
           )}>
-            <Eye className={cn(
-              "w-6 h-6",
-              leftEyeDetected ? "text-green-600" : "text-red-500"
-            )} />
+            {leftEyeDetected ? (
+              <Eye className="w-6 h-6 text-green-600" />
+            ) : (
+              <AlertTriangle className="w-6 h-6 text-amber-600" />
+            )}
           </div>
-          <span className="text-sm font-medium">Ojo izquierdo</span>
+          <span className="text-sm font-medium">{t('exercise.leftEye')}</span>
           <span className="text-xs text-foreground/70">
-            {leftEyeDetected ? "Detectado" : "No detectado"}
+            {leftEyeDetected ? t('exercise.detected') : t('exercise.keepTrying')}
           </span>
         </div>
         
         <div className="flex flex-col items-center">
           <div className={cn(
             "w-14 h-14 rounded-full mb-2 flex items-center justify-center",
-            rightEyeDetected ? "bg-green-100" : "bg-red-100"
+            rightEyeDetected ? "bg-green-100" : "bg-amber-100"
           )}>
-            <Eye className={cn(
-              "w-6 h-6",
-              rightEyeDetected ? "text-green-600" : "text-red-500"
-            )} />
+            {rightEyeDetected ? (
+              <Eye className="w-6 h-6 text-green-600" /> 
+            ) : (
+              <AlertTriangle className="w-6 h-6 text-amber-600" />
+            )}
           </div>
-          <span className="text-sm font-medium">Ojo derecho</span>
+          <span className="text-sm font-medium">{t('exercise.rightEye')}</span>
           <span className="text-xs text-foreground/70">
-            {rightEyeDetected ? "Detectado" : "No detectado"}
+            {rightEyeDetected ? t('exercise.detected') : t('exercise.keepTrying')}
           </span>
         </div>
       </div>
       
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium">Tiempo restante</span>
+          <span className="text-sm font-medium">{t('exercise.timeRemaining')}</span>
           <span 
             className={cn(
               "text-lg font-semibold transition-all",
@@ -102,9 +138,9 @@ const ExerciseControls = ({
             {formatTime(timeRemaining)}
           </span>
         </div>
-        <div className="w-full h-2 bg-secondary rounded-full overflow-hidden">
+        <div className="w-full h-3 bg-blue-100 rounded-full overflow-hidden">
           <div 
-            className="h-full bg-primary transition-all duration-1000"
+            className="h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-1000"
             style={{ width: `${(timeRemaining / 300) * 100}%` }} // Assuming 5 minutes (300 seconds) total
           />
         </div>
@@ -115,18 +151,18 @@ const ExerciseControls = ({
           <Button 
             onClick={onPause}
             variant="secondary"
-            className="w-32"
+            className="w-32 rounded-full"
           >
             <Pause className="w-4 h-4 mr-2" />
-            Pausar
+            {t('exercise.pause')}
           </Button>
         ) : (
           <Button 
             onClick={onStart}
-            className="w-32"
+            className="w-32 bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white rounded-full"
           >
             <Play className="w-4 h-4 mr-2" />
-            Iniciar
+            {t('exercise.start')}
           </Button>
         )}
       </div>

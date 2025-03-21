@@ -42,18 +42,26 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 // Provider component
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  // Try to get language from localStorage or default to Spanish
+  // Try to get language from localStorage or default to English
   const [language, setLanguageState] = useState<Language>(() => {
     const savedLanguage = localStorage.getItem('language') as Language;
-    return savedLanguage && Object.keys(languageNames).includes(savedLanguage) 
-      ? savedLanguage 
-      : 'es';
+    const browserLanguage = navigator.language.split('-')[0] as Language;
+    
+    // First check localStorage, then browser language, then default to English
+    if (savedLanguage && Object.keys(languageNames).includes(savedLanguage)) {
+      return savedLanguage;
+    } else if (browserLanguage && Object.keys(languageNames).includes(browserLanguage)) {
+      return browserLanguage;
+    }
+    return 'en';
   });
   
   // Create a setter function that forces re-rendering
   const setLanguage = (newLanguage: Language) => {
     console.log(`Setting language to: ${newLanguage}`);
-    setLanguageState(newLanguage);
+    if (language !== newLanguage) {
+      setLanguageState(newLanguage);
+    }
   };
   
   // Update localStorage when language changes
@@ -61,6 +69,10 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     console.log(`Language changed to: ${language}`);
     localStorage.setItem('language', language);
     document.documentElement.lang = language;
+    
+    // Force re-render of all components using translations
+    const event = new CustomEvent('languageChanged', { detail: { language } });
+    window.dispatchEvent(event);
   }, [language]);
   
   // Translation function

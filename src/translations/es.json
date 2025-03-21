@@ -3,157 +3,98 @@
   "header": {
     "home": "Inicio",
     "about": "Acerca de",
-    "startExercise": "Comenzar ejercicio"
+    "startExercise": "Iniciar Ejercicio"
   },
   "index": {
     "hero": {
-      "tagline": "Entrena tu visión con IA",
-      "title": "Corrige tu ojo perezoso con ejercicios guiados",
-      "description": "Ojo Perezoso utiliza inteligencia artificial para ayudarte a corregir la ambliopía mediante ejercicios personalizados que entrenan tu cerebro para mejorar la coordinación ocular.",
-      "startButton": "Comenzar ejercicio",
-      "learnMore": "Aprender más"
+      "tagline": "Ejercicios de visión para niños",
+      "title": "¡Ejercicios divertidos para tu ojo perezoso!",
+      "description": "¡Ayuda a tu ojo perezoso a volverse fuerte y saludable con ejercicios divertidos! Nuestro amigo perezoso te guiará a través de actividades simples diseñadas para fortalecer tu visión.",
+      "startButton": "Iniciar Ejercicios",
+      "learnMore": "Más Información"
     },
     "preview": {
-      "cameraPreview": "Vista previa de la cámara",
+      "cameraPreview": "La vista de la cámara aparecerá aquí",
       "exerciseInProgress": "Ejercicio en progreso",
-      "eyesDetected": "Ojos detectados",
-      "followPrompt": "Sigue el punto con ambos ojos",
+      "eyesDetected": "Ojos Detectados",
+      "followPrompt": "Sigue el objetivo",
       "pauseButton": "Pausar"
     },
     "features": {
-      "title": "Características principales",
-      "subtitle": "Diseñado con la precisión y atención al detalle que tu visión merece",
+      "title": "Características Divertidas y Útiles",
+      "subtitle": "Nuestra aplicación está diseñada para ayudar a los niños a mejorar su visión de manera divertida y atractiva",
       "eyeDetection": {
-        "title": "Detección ocular con IA",
-        "description": "Algoritmos precisos que rastrean tus ojos en tiempo real para proporcionar retroalimentación personalizada."
+        "title": "Detección de Ojos",
+        "description": "Nuestro amigable perezoso usa la cámara para seguir los movimientos de tus ojos durante los ejercicios"
       },
       "customExercises": {
-        "title": "Ejercicios personalizados",
-        "description": "Rutinas diseñadas específicamente para fortalecer los músculos oculares y mejorar la coordinación cerebral."
+        "title": "Ejercicios Divertidos",
+        "description": "Diferentes ejercicios oculares diseñados específicamente para niños con ojo perezoso"
       },
       "progressTracking": {
-        "title": "Seguimiento de progreso",
-        "description": "Monitorea tu mejora a lo largo del tiempo con métricas detalladas y visualizaciones claras."
+        "title": "Seguimiento de Progreso",
+        "description": "Mira cuánto has mejorado con gráficos coloridos y recompensas"
       }
     },
     "testimonial": {
-      "quote": "Después de usar Ojo Perezoso durante 8 semanas, he notado una mejora significativa en mi visión periférica y profundidad.",
-      "name": "María García",
-      "title": "Paciente de ambliopía"
+      "quote": "¡A mi hijo le encanta hacer sus ejercicios oculares con el perezoso amigable! ¡Ha hecho que su terapia visual sea mucho más divertida!",
+      "name": "Jessica M.",
+      "title": "Madre de un niño de 7 años"
     },
     "cta": {
-      "title": "Empieza a corregir tu visión hoy",
-      "description": "Dedica solo 10 minutos diarios para notar mejoras significativas en tu visión binocular",
-      "button": "Comenzar ahora"
+      "title": "¿Listo para ayudar a tus ojos?",
+      "description": "¡Comienza hoy con ejercicios divertidos guiados por nuestro amigable perezoso!",
+      "button": "Comenzar Ejercicios Oculares"
     },
     "footer": {
       "rights": "Todos los derechos reservados."
     }
   },
-  "about": {
-    "hero": {
-      "tagline": "Sobre la aplicación",
-      "title": "Qué es Ojo Perezoso y cómo funciona",
-      "description": "Una solución innovadora basada en evidencia científica para corregir la ambliopía (ojo perezoso) mediante ejercicios visuales asistidos por inteligencia artificial."
-    },
-    "lazyEye": {
-      "title": "¿Qué es el ojo perezoso?",
-      "description1": "La ambliopía, comúnmente conocida como \"ojo perezoso\", es una condición ocular que afecta aproximadamente al 3% de la población mundial. Se desarrolla durante la infancia cuando el cerebro y un ojo no trabajan juntos correctamente.",
-      "description2": "En esta condición, el cerebro favorece a un ojo sobre el otro, lo que puede provocar problemas de visión en el ojo menos utilizado. Con el tiempo, el ojo \"perezoso\" puede desarrollar una visión reducida si no se trata adecuadamente.",
-      "description3": "Aunque la ambliopía se diagnostica principalmente en la infancia, estudios recientes muestran que el cerebro adulto conserva la plasticidad necesaria para mejorar la función visual a través de ejercicios específicos.",
-      "symptoms": "Síntomas comunes",
-      "symptomsList": [
-        "Visión borrosa o reducida",
-        "Problemas de percepción de profundidad",
-        "Mala coordinación ojo-mano",
-        "Ojos que no parecen trabajar juntos",
-        "Inclinación de la cabeza o cerrar un ojo",
-        "Fatiga visual y dolores de cabeza"
-      ]
-    },
-    "howItWorks": {
-      "title": "Cómo funciona Ojo Perezoso",
-      "steps": [
-        {
-          "title": "Detección precisa",
-          "description": "La aplicación utiliza la cámara frontal para rastrear tus ojos en tiempo real, monitoreando su movimiento y coordinación."
-        },
-        {
-          "title": "Ejercicios guiados",
-          "description": "Sigue objetivos visuales específicos diseñados para fortalecer el ojo más débil y mejorar la coordinación binocular."
-        },
-        {
-          "title": "Seguimiento de progreso",
-          "description": "La aplicación monitorea y registra tu progreso, ajustando la dificultad de los ejercicios para optimizar los resultados."
-        }
-      ]
-    },
-    "science": {
-      "title": "Fundamento científico",
-      "paragraph1": "Ojo Perezoso se basa en estudios científicos recientes que demuestran la eficacia de los ejercicios visuales para la ambliopía. La investigación muestra que el entrenamiento visual puede mejorar la agudeza visual, la sensibilidad al contraste y la función binocular.",
-      "paragraph2": "El cerebro humano mantiene una neuroplasticidad significativa incluso en la edad adulta, lo que permite que las conexiones neuronales responsables de la visión se reorganicen y fortalezcan con el entrenamiento adecuado.",
-      "paragraph3": "Nuestros ejercicios están diseñados para:",
-      "benefitsList": [
-        "Estimular el uso del ojo afectado",
-        "Mejorar la coordinación entre ambos ojos",
-        "Fortalecer los músculos oculares",
-        "Entrenar el cerebro para procesar correctamente las señales de ambos ojos"
-      ],
-      "note": "Nota: Aunque Ojo Perezoso puede ser una herramienta efectiva para complementar el tratamiento de la ambliopía, siempre recomendamos consultar con un oftalmólogo u optometrista para un diagnóstico y tratamiento profesional."
-    },
-    "usage": {
-      "title": "Uso recomendado",
-      "intro": "Para obtener los mejores resultados con Ojo Perezoso, recomendamos seguir estas pautas:",
-      "recommendations": [
-        {
-          "title": "Sesiones diarias",
-          "description": "Realiza ejercicios durante 5-10 minutos, al menos una vez al día."
-        },
-        {
-          "title": "Ambiente adecuado",
-          "description": "Utiliza la aplicación en un espacio bien iluminado, sin distracciones."
-        },
-        {
-          "title": "Posición correcta",
-          "description": "Mantén una distancia cómoda de la pantalla (aproximadamente 40-50 cm)."
-        },
-        {
-          "title": "Progresión gradual",
-          "description": "Comienza con sesiones cortas y aumenta gradualmente la duración conforme te sientas más cómodo."
-        },
-        {
-          "title": "Descansos necesarios",
-          "description": "Si experimentas fatiga visual, toma un descanso. La sobreexigencia puede ser contraproducente."
-        }
-      ],
-      "important": "Importante: La consistencia es clave para el éxito. Los resultados pueden variar según la gravedad de la ambliopía y la edad del usuario, pero la mayoría de las personas comienzan a notar mejoras después de 4-6 semanas de uso regular."
-    }
-  },
   "exercise": {
+    "title": "Ejercicio {{current}}/{{total}}",
+    "leftEye": "Ojo Izquierdo",
+    "rightEye": "Ojo Derecho",
+    "detected": "Detectado",
+    "keepTrying": "¡Sigue intentando!",
+    "timeRemaining": "Tiempo Restante",
+    "start": "Iniciar",
+    "pause": "Pausar",
+    "close": "Cerrar Ejercicio",
+    "back": "Volver",
+    "confirmEnd": "¿Estás seguro de que deseas finalizar el ejercicio?",
+    "paused": "Ejercicio pausado",
+    "leftEyeDetected": "¡Ojo izquierdo detectado! ¡Buen trabajo!",
+    "rightEyeDetected": "¡Ojo derecho detectado! ¡Excelente trabajo!",
+    "modelsLoaded": "¡Seguimiento ocular listo!",
+    "modelsError": "Continuaremos sin seguimiento ocular",
+    "steps": {
+      "lookUp": "¡Mira Arriba! 👆",
+      "lookDown": "¡Mira Abajo! 👇",
+      "lookLeft": "¡Mira a la Izquierda! 👈",
+      "lookRight": "¡Mira a la Derecha! 👉",
+      "lookCircular": "¡Sigue en Círculo! 🔄"
+    },
     "instructions": {
-      "title": "Instrucciones del ejercicio",
-      "steps": [
-        "Mantén tu cabeza estable y a una distancia cómoda de la pantalla.",
-        "Sigue con ambos ojos los objetivos visuales que aparecerán en pantalla.",
-        "Completa la sesión de 5 minutos para obtener mejores resultados."
-      ],
-      "startButton": "Comenzar ejercicio"
+      "title": "¡Vamos a Ejercitar tus Ojos!",
+      "step1": "Mantén tu cabeza quieta y mira la pantalla desde una distancia cómoda.",
+      "step2": "Sigue el objetivo en movimiento con ambos ojos. ¡Nuestro amigo perezoso te ayudará!",
+      "step3": "Completa la sesión de 5 minutos para obtener mejores resultados. ¡Diviértete!",
+      "start": "Iniciar Ejercicio"
     },
-    "controls": {
-      "back": "Volver",
-      "pause": "Pausar",
-      "resume": "Reanudar",
-      "end": "Finalizar",
-      "confirmEnd": "¿Estás seguro que deseas finalizar el ejercicio?"
+    "complete": {
+      "title": "¡Buen Trabajo!",
+      "message": "¡Has completado una sesión de ejercicios oculares! La práctica regular ayudará a fortalecer los músculos de tus ojos.",
+      "home": "Volver al Inicio",
+      "newExercise": "Nuevo Ejercicio"
     },
-    "completion": {
-      "title": "¡Ejercicio completado!",
-      "message": "Has completado con éxito una sesión de entrenamiento para tu ojo perezoso. La práctica constante es clave para ver mejoras significativas.",
-      "homeButton": "Volver al inicio",
-      "newButton": "Nuevo ejercicio"
+    "sloth": {
+      "welcome": "¡Hola! ¡Soy Sammy el Perezoso! Te ayudaré a ejercitar tus ojos. ¡Vamos a divertirnos!",
+      "start": "¡Haz clic en iniciar cuando estés listo para comenzar el ejercicio!",
+      "noEyesDetected": "¡Aún no puedo ver tus ojos! ¡Asegúrate de que tu cara sea visible para la cámara!",
+      "keepGoing": "¡Lo estás haciendo genial! ¡Sigue el objetivo con tus ojos!",
+      "almostDone": "¡Ya casi! ¡Solo un poco más!",
+      "completed": "¡Excelente trabajo! ¡Has terminado el ejercicio! ¡Tus ojos se están fortaleciendo!",
+      "dismiss": "Ocultar a Sammy"
     }
-  },
-  "languageSelector": {
-    "label": "Idioma:"
   }
 }
