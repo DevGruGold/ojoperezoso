@@ -14,7 +14,10 @@ const LanguageToggle = () => {
 
   const handleLanguageChange = (newLanguage: Language) => {
     console.log(`Changing language from ${language} to ${newLanguage}`);
-    setLanguage(newLanguage);
+    // Only change if different to avoid unnecessary re-renders
+    if (language !== newLanguage) {
+      setLanguage(newLanguage);
+    }
   };
 
   return (

@@ -43,12 +43,18 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 // Provider component
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   // Try to get language from localStorage or default to Spanish
-  const [language, setLanguage] = useState<Language>(() => {
+  const [language, setLanguageState] = useState<Language>(() => {
     const savedLanguage = localStorage.getItem('language') as Language;
     return savedLanguage && Object.keys(languageNames).includes(savedLanguage) 
       ? savedLanguage 
       : 'es';
   });
+  
+  // Create a setter function that forces re-rendering
+  const setLanguage = (newLanguage: Language) => {
+    console.log(`Setting language to: ${newLanguage}`);
+    setLanguageState(newLanguage);
+  };
   
   // Update localStorage when language changes
   useEffect(() => {
@@ -86,8 +92,13 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   
+  // Force re-render on language change
+  const contextValue = React.useMemo(() => {
+    return { language, setLanguage, t };
+  }, [language]);
+  
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={contextValue}>
       {children}
     </LanguageContext.Provider>
   );
