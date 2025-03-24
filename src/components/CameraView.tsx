@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { Eye, AlertTriangle, Camera, ShieldAlert } from 'lucide-react';
+import { Eye, AlertTriangle, Camera } from 'lucide-react';
 import * as faceapi from 'face-api.js';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { toast } from 'sonner';
@@ -65,27 +65,33 @@ const CameraView = ({ onEyeDetected, showGuides = true }: CameraViewProps) => {
     createModelsDirectory();
   }, [t, onEyeDetected]);
   
-  // Initialize the camera
+  // Initialize the camera with high resolution
   useEffect(() => {
     let stream: MediaStream | null = null;
     
     const initCamera = async () => {
       try {
-        // Request camera with high resolution
+        // Request camera with highest possible resolution
         stream = await navigator.mediaDevices.getUserMedia({
           video: { 
             facingMode: 'user',
-            width: { ideal: 1280 },
-            height: { ideal: 720 }
+            width: { ideal: 3840 }, // 4K
+            height: { ideal: 2160 }
           }
         });
         
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
-          await videoRef.current.play();
-          setCameraReady(true);
-          setError(null);
-          toast.success(t('exercise.cameraReady'));
+          videoRef.current.play()
+            .then(() => {
+              setCameraReady(true);
+              setError(null);
+              toast.success(t('exercise.cameraReady'));
+            })
+            .catch(err => {
+              console.error('Error playing video:', err);
+              setError(t('exercise.cameraError'));
+            });
         }
       } catch (err) {
         console.error('Error accessing camera:', err);
@@ -313,7 +319,7 @@ const CameraView = ({ onEyeDetected, showGuides = true }: CameraViewProps) => {
   return (
     <div 
       ref={containerRef}
-      className="camera-container w-full h-full overflow-hidden rounded-2xl bg-gradient-to-b from-blue-50 to-purple-50"
+      className="camera-container w-full h-full overflow-hidden bg-gradient-to-b from-blue-50 to-purple-50"
     >
       {error ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-white bg-black/70">
@@ -330,6 +336,7 @@ const CameraView = ({ onEyeDetected, showGuides = true }: CameraViewProps) => {
             ref={videoRef}
             className={cn(
               "w-full h-full object-cover transition-opacity duration-1000",
+              "scale-x-[-1]", // Mirror the video
               cameraReady ? "opacity-100" : "opacity-0"
             )}
             playsInline
@@ -337,7 +344,7 @@ const CameraView = ({ onEyeDetected, showGuides = true }: CameraViewProps) => {
           />
           <canvas 
             ref={canvasRef}
-            className="camera-overlay absolute top-0 left-0 w-full h-full animate-fade-in pointer-events-none"
+            className="camera-overlay absolute top-0 left-0 w-full h-full animate-fade-in pointer-events-none scale-x-[-1]" // Mirror the canvas too
           />
           {!modelsLoaded && cameraReady && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
