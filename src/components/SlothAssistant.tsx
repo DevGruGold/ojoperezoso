@@ -4,13 +4,20 @@ import { cn } from '@/lib/utils';
 
 interface SlothAssistantProps {
   message: string;
+  interactive?: boolean;
+  onInteraction?: () => void;
 }
 
-const SlothAssistant: React.FC<SlothAssistantProps> = ({ message }) => {
+const SlothAssistant: React.FC<SlothAssistantProps> = ({ 
+  message, 
+  interactive = false,
+  onInteraction
+}) => {
   const [animating, setAnimating] = useState(false);
   const [messageVisible, setMessageVisible] = useState(true);
   const [blinking, setBlinking] = useState(false);
   const [waving, setWaving] = useState(false);
+  const [jumping, setJumping] = useState(false);
   
   // Animate sloth on message change
   useEffect(() => {
@@ -51,21 +58,52 @@ const SlothAssistant: React.FC<SlothAssistantProps> = ({ message }) => {
     return () => clearInterval(waveInterval);
   }, []);
   
+  // Occasional jumping when interactive
+  useEffect(() => {
+    if (!interactive) return;
+    
+    const jumpInterval = setInterval(() => {
+      setJumping(true);
+      setTimeout(() => setJumping(false), 500);
+    }, Math.random() * 8000 + 10000); // Random jump between 10-18 seconds
+    
+    return () => clearInterval(jumpInterval);
+  }, [interactive]);
+  
+  const handleInteraction = () => {
+    if (interactive && onInteraction) {
+      setAnimating(true);
+      setWaving(true);
+      setTimeout(() => {
+        setAnimating(false);
+        setWaving(false);
+      }, 800);
+      onInteraction();
+    }
+  };
+  
   return (
-    <div className="flex items-start bg-amber-50 rounded-xl p-4 border-2 border-amber-100">
+    <div 
+      className={cn(
+        "flex items-start bg-amber-50 rounded-xl p-4 border-2 border-amber-100 transition-all",
+        interactive && "cursor-pointer hover:bg-amber-100"
+      )}
+      onClick={interactive ? handleInteraction : undefined}
+    >
       <div className="relative mr-4 min-w-[100px]">
         {/* Sloth SVG with animations - improved size and positioning */}
         <div className={cn(
           "w-24 h-28 transition-all duration-500",
-          animating && "transform scale-110"
+          animating && "transform scale-110",
+          jumping && "animate-bounce"
         )}>
-          <svg viewBox="0 0 130 150" className="w-full h-full">
+          <svg viewBox="0 0 130 160" className="w-full h-full">
             {/* Sloth body */}
-            <ellipse cx="65" cy="85" rx="35" ry="45" fill="#A89078" />
+            <ellipse cx="65" cy="95" rx="35" ry="45" fill="#A89078" />
             
             {/* Sloth arms */}
             <path 
-              d={waving ? "M 30,75 Q 15,55 20,45" : "M 30,75 Q 20,95 25,115"} 
+              d={waving ? "M 30,85 Q 15,65 20,55" : "M 30,85 Q 20,105 25,125"} 
               stroke="#A89078" 
               strokeWidth="10" 
               fill="none" 
@@ -77,7 +115,7 @@ const SlothAssistant: React.FC<SlothAssistantProps> = ({ message }) => {
               )}
             />
             <path 
-              d="M 100,75 Q 110,95 105,115" 
+              d="M 100,85 Q 110,105 105,125" 
               stroke="#A89078" 
               strokeWidth="10" 
               fill="none" 
@@ -86,46 +124,46 @@ const SlothAssistant: React.FC<SlothAssistantProps> = ({ message }) => {
             />
             
             {/* Sloth face */}
-            <circle cx="65" cy="55" r="30" fill="#C2B39B" />
+            <circle cx="65" cy="65" r="30" fill="#C2B39B" />
             
             {/* Sloth ears */}
-            <circle cx="40" cy="50" r="8" fill="#A89078" />
-            <circle cx="90" cy="50" r="8" fill="#A89078" />
+            <circle cx="40" cy="60" r="8" fill="#A89078" />
+            <circle cx="90" cy="60" r="8" fill="#A89078" />
             
             {/* Sloth face markings */}
-            <path d="M 50,35 Q 65,30 80,35" stroke="#8D7761" strokeWidth="3" fill="none" />
+            <path d="M 50,45 Q 65,40 80,45" stroke="#8D7761" strokeWidth="3" fill="none" />
             
             {/* Sloth eyes */}
             <g>
-              <circle cx="55" cy="50" r="6" fill="white" />
-              <circle cx="75" cy="50" r="6" fill="white" />
+              <circle cx="55" cy="60" r="6" fill="white" />
+              <circle cx="75" cy="60" r="6" fill="white" />
               
               {/* Eyelids for blinking */}
               <path 
-                d={blinking ? "M 49,50 Q 55,45 61,50" : "M 49,47 Q 55,41 61,47"} 
+                d={blinking ? "M 49,60 Q 55,55 61,60" : "M 49,57 Q 55,51 61,57"} 
                 fill="#C2B39B" 
                 className="transition-all duration-100"
               />
               <path 
-                d={blinking ? "M 69,50 Q 75,45 81,50" : "M 69,47 Q 75,41 81,47"} 
+                d={blinking ? "M 69,60 Q 75,55 81,60" : "M 69,57 Q 75,51 81,57"} 
                 fill="#C2B39B" 
                 className="transition-all duration-100"
               />
               
-              <circle cx="55" cy="50" r={blinking ? "0" : "3"} fill="black" className="transition-all duration-100" />
-              <circle cx="75" cy="50" r={blinking ? "0" : "3"} fill="black" className="transition-all duration-100" />
+              <circle cx="55" cy="60" r={blinking ? "0" : "3"} fill="black" className="transition-all duration-100" />
+              <circle cx="75" cy="60" r={blinking ? "0" : "3"} fill="black" className="transition-all duration-100" />
               
               {/* Eye highlights */}
-              <circle cx="56" cy="49" r="1" fill="white" />
-              <circle cx="76" cy="49" r="1" fill="white" />
+              <circle cx="56" cy="59" r="1" fill="white" />
+              <circle cx="76" cy="59" r="1" fill="white" />
             </g>
             
             {/* Sloth nose */}
-            <ellipse cx="65" cy="60" rx="7" ry="5" fill="#8D7761" />
+            <ellipse cx="65" cy="70" rx="7" ry="5" fill="#8D7761" />
             
             {/* Sloth mouth - animated */}
             <path 
-              d={animating ? "M 55,70 Q 65,75 75,70" : "M 55,70 Q 65,72 75,70"} 
+              d={animating ? "M 55,80 Q 65,85 75,80" : "M 55,80 Q 65,82 75,80"} 
               stroke="#8D7761" 
               strokeWidth="2" 
               fill="none" 
@@ -133,17 +171,17 @@ const SlothAssistant: React.FC<SlothAssistantProps> = ({ message }) => {
             />
             
             {/* Sloth claws */}
-            <line x1="22" y1="113" x2="28" y2="117" stroke="#6D5D4B" strokeWidth="2" />
-            <line x1="24" y1="111" x2="30" y2="115" stroke="#6D5D4B" strokeWidth="2" />
-            <line x1="26" y1="109" x2="32" y2="113" stroke="#6D5D4B" strokeWidth="2" />
+            <line x1="22" y1="123" x2="28" y2="127" stroke="#6D5D4B" strokeWidth="2" />
+            <line x1="24" y1="121" x2="30" y2="125" stroke="#6D5D4B" strokeWidth="2" />
+            <line x1="26" y1="119" x2="32" y2="123" stroke="#6D5D4B" strokeWidth="2" />
             
-            <line x1="108" y1="113" x2="102" y2="117" stroke="#6D5D4B" strokeWidth="2" />
-            <line x1="106" y1="111" x2="100" y2="115" stroke="#6D5D4B" strokeWidth="2" />
-            <line x1="104" y1="109" x2="98" y2="113" stroke="#6D5D4B" strokeWidth="2" />
+            <line x1="108" y1="123" x2="102" y2="127" stroke="#6D5D4B" strokeWidth="2" />
+            <line x1="106" y1="121" x2="100" y2="125" stroke="#6D5D4B" strokeWidth="2" />
+            <line x1="104" y1="119" x2="98" y2="123" stroke="#6D5D4B" strokeWidth="2" />
             
             {/* Fun hair tuft on top */}
             <path 
-              d="M 60,25 Q 65,15 70,25" 
+              d="M 60,35 Q 65,25 70,35" 
               stroke="#8D7761" 
               strokeWidth="4" 
               fill="none" 

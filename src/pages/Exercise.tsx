@@ -212,12 +212,18 @@ const Exercise = () => {
     if (showInstructions) {
       return (
         <div className="fixed inset-0 flex items-center justify-center z-20 bg-black/70">
-          <div className="glass max-w-lg mx-auto p-8 rounded-3xl border-2 border-amber-200 animate-scale-up bg-white/95">
+          <div className="bg-white/95 max-w-lg mx-auto p-8 rounded-3xl border-2 border-amber-200 animate-scale-up">
             <h2 className="text-2xl font-bold mb-4 text-center text-blue-600">
               {t('exercise.instructions.title')}
             </h2>
             
-            <p className="text-center mb-6">{t('exercise.followSlothEyes')}</p>
+            <div className="mb-6">
+              <SlothAssistant 
+                message={t('exercise.followSlothEyes')} 
+                interactive={true}
+                onInteraction={handleStart}
+              />
+            </div>
             
             <div className="flex justify-center">
               <Button onClick={handleStart} className="kid-friendly-button">
@@ -231,8 +237,8 @@ const Exercise = () => {
     
     if (sessionComplete) {
       return (
-        <div className="fixed inset-0 flex items-center justify-center z-20 bg-black/70">
-          <div className="glass max-w-lg mx-auto p-8 rounded-3xl animate-scale-up border-2 border-amber-200 bg-white/95">
+        <div className="fixed inset-0 flex items-center justify-center z-20">
+          <div className="bg-white/95 max-w-lg mx-auto p-8 rounded-3xl animate-scale-up border-2 border-amber-200">
             <div className="flex justify-center mb-6">
               <div className="relative">
                 <ProgressIndicator progress={100} size="lg" />
@@ -245,7 +251,11 @@ const Exercise = () => {
             <h2 className="text-2xl font-bold mb-4 text-center text-blue-600">{t('exercise.complete.title')}</h2>
             
             <div className="mb-8">
-              <SlothAssistant message={t('exercise.sloth.completed')} />
+              <SlothAssistant 
+                message={t('exercise.sloth.completed')} 
+                interactive={true}
+                onInteraction={handleNewSession}
+              />
             </div>
             
             <div className="grid grid-cols-2 gap-4">
