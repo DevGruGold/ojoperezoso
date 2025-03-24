@@ -27,14 +27,18 @@ const Exercise = () => {
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [eyeTargetPosition, setEyeTargetPosition] = useState({ x: 50, y: 50 });
   const [exerciseStep, setExerciseStep] = useState(0);
+  const [patternType, setPatternType] = useState('smooth');
   
-  // Exercise steps for structured progression
+  // Exercise steps for structured progression - more focused on therapy
   const exerciseSteps = [
-    t('exercise.steps.lookUp'),
-    t('exercise.steps.lookDown'),
-    t('exercise.steps.lookLeft'),
-    t('exercise.steps.lookRight'),
-    t('exercise.steps.lookCircular'),
+    'lookUp',
+    'lookDown',
+    'lookLeft',
+    'lookRight',
+    'lookCircular',
+    'convergence',
+    'figure8',
+    'randomJumps'
   ];
   
   // Download face-api.js models
@@ -58,16 +62,17 @@ const Exercise = () => {
     loadModels();
   }, [t]);
   
-  // Update exercise target position based on current step
+  // Update exercise target position based on current step - enhanced with therapeutic patterns
   useEffect(() => {
     if (!isRunning) return;
     
     const moveTarget = () => {
       let newX = 50;
       let newY = 50;
+      const now = Date.now() / 1000;
       
       // Position based on current exercise step
-      switch (exerciseStep % 5) {
+      switch (exerciseStep % exerciseSteps.length) {
         case 0: // Look up
           newY = 20;
           break;
@@ -81,18 +86,33 @@ const Exercise = () => {
           newX = 80;
           break;
         case 4: // Look circular - use sine/cosine for circular motion
-          const timestamp = Date.now() / 1000;
-          newX = 50 + 30 * Math.sin(timestamp);
-          newY = 50 + 30 * Math.cos(timestamp);
+          newX = 50 + 30 * Math.sin(now);
+          newY = 50 + 30 * Math.cos(now);
+          break;
+        case 5: // Convergence exercise - move from far to near (center)
+          newX = 50 + (Math.sin(now * 0.5) * 30);
+          newY = 50;
+          break;
+        case 6: // Figure 8 pattern - good for muscle strengthening
+          newX = 50 + 30 * Math.sin(now);
+          newY = 50 + 20 * Math.sin(2 * now);
+          break;
+        case 7: // Random jumps - helps with saccadic movements
+          // Change position every 2 seconds for random jumps
+          const jumpTime = Math.floor(now / 2);
+          const pseudoRandom = Math.sin(jumpTime * 137.5) * 0.5 + 0.5; // Pseudo-random between 0-1
+          const pseudoRandom2 = Math.sin(jumpTime * 259.3) * 0.5 + 0.5;
+          newX = 20 + pseudoRandom * 60;
+          newY = 20 + pseudoRandom2 * 60;
           break;
       }
       
       setEyeTargetPosition({ x: newX, y: newY });
     };
     
-    const targetInterval = setInterval(moveTarget, 100);
+    const targetInterval = setInterval(moveTarget, 50); // More frequent updates for smoother motion
     return () => clearInterval(targetInterval);
-  }, [isRunning, exerciseStep]);
+  }, [isRunning, exerciseStep, exerciseSteps.length, patternType]);
   
   // Timer logic
   useEffect(() => {
@@ -115,27 +135,29 @@ const Exercise = () => {
         return Math.min(newProgress, 100);
       });
       
-      // Change exercise step every 60 seconds
-      if (timeRemaining % 60 === 0 && timeRemaining > 0) {
-        setExerciseStep(prev => (prev + 1) % 5);
-        toast.info(exerciseSteps[(exerciseStep + 1) % 5], {
+      // Change exercise step every 30 seconds (more frequent changes)
+      if (timeRemaining % 30 === 0 && timeRemaining > 0) {
+        setExerciseStep(prev => (prev + 1) % exerciseSteps.length);
+        // Alternate between smooth and saccadic patterns
+        setPatternType(prev => prev === 'smooth' ? 'saccadic' : 'smooth');
+        toast.info(t(`exercise.steps.${exerciseSteps[(exerciseStep + 1) % exerciseSteps.length]}`), {
           icon: <Eye className="text-blue-500" />
         });
       }
     }, 1000);
     
     return () => clearInterval(timer);
-  }, [isRunning, timeRemaining, exerciseStep, exerciseSteps]);
+  }, [isRunning, timeRemaining, exerciseStep, exerciseSteps, t]);
   
-  // We'll simulate eye detection since we're not actually tracking the user's eyes
+  // Eye detection simulation
   useEffect(() => {
     if (isRunning) {
-      // Simulate that we're detecting eyes after a short delay
+      // Simulate detection after short delay
       const detectionTimer = setTimeout(() => {
         setLeftEyeDetected(true);
         setRightEyeDetected(true);
         toast.success(t('exercise.eyesDetected'));
-      }, 3000);
+      }, 2000);
       
       return () => clearTimeout(detectionTimer);
     } else {
@@ -151,11 +173,11 @@ const Exercise = () => {
       setSessionStarted(true);
     } else {
       setIsRunning(true);
-      toast.info(exerciseSteps[exerciseStep], {
+      toast.info(t(`exercise.steps.${exerciseSteps[exerciseStep]}`), {
         icon: <Eye className="text-blue-500" />
       });
     }
-  }, [showInstructions, exerciseStep, exerciseSteps]);
+  }, [showInstructions, exerciseStep, exerciseSteps, t]);
   
   // Handle pause exercise
   const handlePause = useCallback(() => {
@@ -191,32 +213,11 @@ const Exercise = () => {
       return (
         <div className="fixed inset-0 flex items-center justify-center z-20 bg-black/70">
           <div className="glass max-w-lg mx-auto p-8 rounded-3xl border-2 border-amber-200 animate-scale-up bg-white/95">
-            <div className="mb-6 flex justify-center">
-              <SlothAssistant message={t('exercise.sloth.welcome')} />
-            </div>
+            <h2 className="text-2xl font-bold mb-4 text-center text-blue-600">
+              {t('exercise.instructions.title')}
+            </h2>
             
-            <h2 className="text-2xl font-bold mb-4 text-center text-blue-600">{t('exercise.instructions.title')}</h2>
-            
-            <ul className="space-y-4 mb-8">
-              <li className="flex items-start kid-card p-3">
-                <span className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5 text-blue-600 font-bold">
-                  1
-                </span>
-                <p className="text-slate-700">{t('exercise.instructions.step1')}</p>
-              </li>
-              <li className="flex items-start kid-card p-3">
-                <span className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5 text-green-600 font-bold">
-                  2
-                </span>
-                <p className="text-slate-700">{t('exercise.instructions.step2')}</p>
-              </li>
-              <li className="flex items-start kid-card p-3">
-                <span className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center mr-3 mt-0.5 text-amber-600 font-bold">
-                  3
-                </span>
-                <p className="text-slate-700">{t('exercise.instructions.step3')}</p>
-              </li>
-            </ul>
+            <p className="text-center mb-6">{t('exercise.followSlothEyes')}</p>
             
             <div className="flex justify-center">
               <Button onClick={handleStart} className="kid-friendly-button">
@@ -247,10 +248,6 @@ const Exercise = () => {
               <SlothAssistant message={t('exercise.sloth.completed')} />
             </div>
             
-            <p className="text-center mb-8 text-slate-700">
-              {t('exercise.complete.message')}
-            </p>
-            
             <div className="grid grid-cols-2 gap-4">
               <Button variant="secondary" onClick={handleReturnHome} className="rounded-full border-2 border-slate-200">
                 {t('exercise.complete.home')}
@@ -275,6 +272,7 @@ const Exercise = () => {
           targetPosition={eyeTargetPosition}
           isRunning={isRunning}
           currentStep={exerciseStep}
+          exerciseSteps={exerciseSteps}
         />
       </div>
       

@@ -7,12 +7,14 @@ interface SlothFaceTrackerProps {
   targetPosition: { x: number, y: number };
   isRunning: boolean;
   currentStep: number;
+  exerciseSteps?: string[];
 }
 
 const SlothFaceTracker: React.FC<SlothFaceTrackerProps> = ({ 
   targetPosition, 
   isRunning,
-  currentStep 
+  currentStep,
+  exerciseSteps = ['lookUp', 'lookDown', 'lookLeft', 'lookRight', 'lookCircular']
 }) => {
   const [blinking, setBlinking] = useState(false);
   const [smiling, setSmiling] = useState(false);
@@ -20,10 +22,10 @@ const SlothFaceTracker: React.FC<SlothFaceTrackerProps> = ({
 
   // Calculate eye position based on target position
   // Limit the movement range to make it look natural
-  const leftEyeX = 50 + (targetPosition.x - 50) * 0.2;
-  const leftEyeY = 45 + (targetPosition.y - 50) * 0.2;
-  const rightEyeX = 70 + (targetPosition.x - 50) * 0.2;
-  const rightEyeY = 45 + (targetPosition.y - 50) * 0.2;
+  const leftEyeX = 50 + (targetPosition.x - 50) * 0.3; // Increased range of motion
+  const leftEyeY = 45 + (targetPosition.y - 50) * 0.3;
+  const rightEyeX = 70 + (targetPosition.x - 50) * 0.3;
+  const rightEyeY = 45 + (targetPosition.y - 50) * 0.3;
 
   // Occasional random blinking
   useEffect(() => {
@@ -49,13 +51,19 @@ const SlothFaceTracker: React.FC<SlothFaceTrackerProps> = ({
     return () => clearInterval(smileInterval);
   }, [isRunning]);
 
+  // Get current exercise name
+  const getCurrentExercise = () => {
+    if (!exerciseSteps || currentStep >= exerciseSteps.length) return 'lookCircular';
+    return exerciseSteps[currentStep];
+  };
+
   return (
     <div className="w-full h-full flex items-center justify-center">
       <svg 
         viewBox="0 0 400 400" 
         className={cn(
-          "w-full h-full max-w-[90vh] transition-all duration-500",
-          isRunning ? "opacity-100" : "opacity-70"
+          "w-full h-full max-w-[95vh] transition-all duration-300",
+          isRunning ? "opacity-100" : "opacity-80"
         )}
       >
         {/* Background circle for the sloth face */}
@@ -118,14 +126,14 @@ const SlothFaceTracker: React.FC<SlothFaceTrackerProps> = ({
           cy={leftEyeY} 
           r={blinking ? 0 : 15} 
           fill="#6D5D4B" 
-          className="transition-all duration-300"
+          className="transition-all duration-200"
         />
         <circle 
           cx={rightEyeX} 
           cy={rightEyeY} 
           r={blinking ? 0 : 15} 
           fill="#6D5D4B" 
-          className="transition-all duration-300"
+          className="transition-all duration-200"
         />
         
         {/* Pupils - these move with the target */}
@@ -134,14 +142,14 @@ const SlothFaceTracker: React.FC<SlothFaceTrackerProps> = ({
           cy={leftEyeY} 
           r={blinking ? 0 : 8} 
           fill="black" 
-          className="transition-all duration-300"
+          className="transition-all duration-200"
         />
         <circle 
           cx={rightEyeX} 
           cy={rightEyeY} 
           r={blinking ? 0 : 8} 
           fill="black" 
-          className="transition-all duration-300"
+          className="transition-all duration-200"
         />
         
         {/* Eye highlights - static */}
@@ -175,40 +183,47 @@ const SlothFaceTracker: React.FC<SlothFaceTrackerProps> = ({
           className="transition-all duration-500"
         />
         
-        {/* Fun hair tuft on top */}
+        {/* Fun hair tuft on top - animated */}
         <path 
           d="M 180,80 Q 200,50 220,80" 
           stroke="#8D7761" 
           strokeWidth="8" 
           fill="none" 
           strokeLinecap="round"
+          className={isRunning ? "animate-bounce" : ""}
         />
         
-        {/* Exercise instruction text */}
+        {/* Visual target indicator */}
         {isRunning && (
-          <g className="animate-bounce">
-            <rect x="100" y="320" width="200" height="50" rx="25" fill="white" opacity="0.9" />
-            <text x="200" y="350" textAnchor="middle" fill="#8D7761" fontWeight="bold" fontSize="18px">
-              {t(`exercise.steps.${currentStep === 0 ? 'lookUp' : 
-                 currentStep === 1 ? 'lookDown' : 
-                 currentStep === 2 ? 'lookLeft' : 
-                 currentStep === 3 ? 'lookRight' : 'lookCircular'}`)}
+          <g className="animate-pulse">
+            <circle 
+              cx={targetPosition.x / 100 * 400} 
+              cy={targetPosition.y / 100 * 400} 
+              r="12" 
+              fill="#FFCC33" 
+              opacity="0.7"
+              stroke="#FFA500"
+              strokeWidth="2"
+            />
+            <circle 
+              cx={targetPosition.x / 100 * 400} 
+              cy={targetPosition.y / 100 * 400} 
+              r="6" 
+              fill="#FFA500" 
+            />
+          </g>
+        )}
+        
+        {/* Brief exercise instruction text */}
+        {isRunning && (
+          <g>
+            <rect x="100" y="320" width="200" height="40" rx="20" fill="white" opacity="0.9" />
+            <text x="200" y="345" textAnchor="middle" fill="#8D7761" fontWeight="bold" fontSize="16px">
+              {t(`exercise.steps.${getCurrentExercise()}`)}
             </text>
           </g>
         )}
       </svg>
-      
-      {/* Visual target indicator for debugging/testing */}
-      {isRunning && (
-        <div 
-          className="absolute w-8 h-8 rounded-full bg-amber-400 opacity-50 pointer-events-none"
-          style={{
-            left: `calc(${targetPosition.x}% - 16px)`,
-            top: `calc(${targetPosition.y}% - 16px)`,
-            transition: 'all 1s ease-in-out'
-          }}
-        />
-      )}
     </div>
   );
 };
