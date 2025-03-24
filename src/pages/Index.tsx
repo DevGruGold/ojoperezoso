@@ -13,8 +13,12 @@ import ExerciseControls from '@/components/ExerciseControls';
 const Index = () => {
   const featuresRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
-  const [showExercise, setShowExercise] = useState(false);
+  const [showExercise, setShowExercise] = useState(true); // Start with exercise showing
   const [slothMessage, setSlothMessage] = useState('');
+  const [leftEyeDetected, setLeftEyeDetected] = useState(false);
+  const [rightEyeDetected, setRightEyeDetected] = useState(false);
+  const [isExerciseRunning, setIsExerciseRunning] = useState(true); // Start exercise running
+  const [timeRemaining, setTimeRemaining] = useState(300); // 5 minutes
   
   // Update sloth message based on exercise state
   useEffect(() => {
@@ -24,6 +28,36 @@ const Index = () => {
       setSlothMessage(t('index.hero.description'));
     }
   }, [showExercise, t]);
+  
+  // Handle eye detection
+  const handleEyeDetection = (leftEye: boolean, rightEye: boolean) => {
+    setLeftEyeDetected(leftEye);
+    setRightEyeDetected(rightEye);
+  };
+  
+  // Handle timer
+  useEffect(() => {
+    if (!isExerciseRunning || !showExercise) return;
+    
+    const timer = setInterval(() => {
+      setTimeRemaining(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    
+    return () => clearInterval(timer);
+  }, [isExerciseRunning, showExercise]);
+  
+  // Reset timer if exercise is closed
+  useEffect(() => {
+    if (!showExercise) {
+      setTimeRemaining(300);
+    }
+  }, [showExercise]);
   
   // Simple intersection observer to trigger animations
   useEffect(() => {
@@ -51,11 +85,21 @@ const Index = () => {
 
   const handleStartExercise = () => {
     setShowExercise(true);
+    setIsExerciseRunning(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleCloseExercise = () => {
     setShowExercise(false);
+    setIsExerciseRunning(false);
+  };
+
+  const handlePauseExercise = () => {
+    setIsExerciseRunning(false);
+  };
+
+  const handleResumeExercise = () => {
+    setIsExerciseRunning(true);
   };
   
   return (
@@ -63,8 +107,11 @@ const Index = () => {
       <Header />
       
       {/* Hero Section with integrated exercise */}
-      <section className="pt-32 pb-16 px-6">
-        <div className="max-w-5xl mx-auto text-center">
+      <section className={cn(
+        "pt-20 pb-16 px-6 flex flex-col",
+        showExercise && "flex-1 min-h-[calc(100vh-80px)]" // Full height when exercise is shown
+      )}>
+        <div className="max-w-5xl mx-auto text-center flex-1 flex flex-col w-full">
           {!showExercise ? (
             <>
               <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-primary/10 text-primary mb-6 animate-fade-in">
@@ -96,7 +143,7 @@ const Index = () => {
               </div>
             </>
           ) : (
-            <div className="max-w-4xl mx-auto">
+            <div className="flex-1 flex flex-col max-w-6xl mx-auto w-full">
               <div className="mb-6">
                 <SlothAssistant 
                   message={slothMessage}
@@ -104,11 +151,26 @@ const Index = () => {
                 />
               </div>
               
-              <div className="mb-4">
-                <CameraView />
+              <div className="flex-1 flex flex-col mb-4">
+                <div className="flex-1 rounded-2xl overflow-hidden shadow-xl mb-4">
+                  <CameraView 
+                    onEyeDetected={handleEyeDetection}
+                    showGuides={true} 
+                  />
+                </div>
               </div>
               
-              <ExerciseControls onClose={handleCloseExercise} />
+              <ExerciseControls 
+                onClose={handleCloseExercise}
+                onStart={handleResumeExercise}
+                onPause={handlePauseExercise}
+                isRunning={isExerciseRunning}
+                leftEyeDetected={leftEyeDetected}
+                rightEyeDetected={rightEyeDetected}
+                currentExercise={1}
+                totalExercises={5}
+                timeRemaining={timeRemaining}
+              />
             </div>
           )}
         </div>

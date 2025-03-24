@@ -7,27 +7,29 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import SlothAssistant from './SlothAssistant';
 
 interface ExerciseControlsProps {
-  onStart: () => void;
-  onPause: () => void;
-  onEnd: () => void;
-  isRunning: boolean;
-  leftEyeDetected: boolean;
-  rightEyeDetected: boolean;
-  currentExercise: number;
-  totalExercises: number;
-  timeRemaining: number;
+  onClose?: () => void;
+  onStart?: () => void;
+  onPause?: () => void;
+  onEnd?: () => void;
+  isRunning?: boolean;
+  leftEyeDetected?: boolean;
+  rightEyeDetected?: boolean;
+  currentExercise?: number;
+  totalExercises?: number;
+  timeRemaining?: number;
 }
 
 const ExerciseControls = ({
-  onStart,
-  onPause,
-  onEnd,
-  isRunning,
-  leftEyeDetected,
-  rightEyeDetected,
-  currentExercise,
-  totalExercises,
-  timeRemaining
+  onStart = () => {},
+  onPause = () => {},
+  onEnd = () => {},
+  onClose = () => {},
+  isRunning = false,
+  leftEyeDetected = false,
+  rightEyeDetected = false,
+  currentExercise = 1,
+  totalExercises = 5,
+  timeRemaining = 300
 }: ExerciseControlsProps) => {
   const [animateTimeRemaining, setAnimateTimeRemaining] = useState(false);
   const [showSlothMessage, setShowSlothMessage] = useState(true);
@@ -82,7 +84,7 @@ const ExerciseControls = ({
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-medium">{t('exercise.title', { current: currentExercise, total: totalExercises })}</h2>
         <button 
-          onClick={onEnd}
+          onClick={onClose}
           className="p-1.5 rounded-full hover:bg-secondary/80 transition-colors"
           aria-label={t('exercise.close')}
         >
