@@ -1,4 +1,3 @@
-
 export interface CameraCapabilities {
   maxResolution: { width: number; height: number };
   hasHDR: boolean;
@@ -29,7 +28,6 @@ class ModernCameraService {
           frameRate: { ideal: settings.frameRate || 30, max: 60 },
           // Modern constraints
           aspectRatio: { ideal: 16/9 },
-          resizeMode: 'crop-and-scale',
           latency: { ideal: 0.1 }, // Low latency for real-time
         }
       };

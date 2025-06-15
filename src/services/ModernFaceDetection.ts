@@ -1,6 +1,4 @@
-
 import { FaceMesh } from '@mediapipe/face_mesh';
-import * as tf from '@tensorflow/tfjs';
 
 export interface EyeData {
   leftEye: { x: number; y: number; confidence: number };
@@ -24,8 +22,6 @@ class ModernFaceDetectionService {
 
   async initialize(): Promise<boolean> {
     try {
-      await tf.ready();
-      
       this.faceMesh = new FaceMesh({
         locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
       });
