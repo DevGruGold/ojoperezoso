@@ -28,7 +28,6 @@ class ModernCameraService {
           frameRate: { ideal: settings.frameRate || 30, max: 60 },
           // Modern constraints
           aspectRatio: { ideal: 16/9 },
-          latency: { ideal: 0.1 }, // Low latency for real-time
         }
       };
 
