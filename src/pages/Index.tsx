@@ -1,16 +1,15 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { modernCamera } from '@/services/ModernCameraService';
 import { toast } from 'sonner';
 
 const Index = () => {
   const [cameraReady, setCameraReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const videoRef = useState<HTMLVideoElement | null>(null);
-  const containerRef = useState<HTMLDivElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const [showControls, setShowControls] = useState(false);
   
-  // Initialize camera immediately
+  // Initialize camera immediately with high quality settings
   useEffect(() => {
     const initCamera = async () => {
       try {
@@ -20,14 +19,15 @@ const Index = () => {
           facingMode: 'user'
         });
 
-        if (stream && videoRef[0]) {
-          videoRef[0].srcObject = stream;
-          await videoRef[0].play();
+        if (stream && videoRef.current) {
+          videoRef.current.srcObject = stream;
+          await videoRef.current.play();
           setCameraReady(true);
           setError(null);
 
           // Optimize camera for device
           await modernCamera.optimizeForDevice();
+          toast.success('High-quality camera ready');
         } else {
           setError('Camera access failed');
         }
@@ -44,7 +44,7 @@ const Index = () => {
     };
   }, []);
 
-  // Request fullscreen immediately
+  // Request fullscreen immediately for immersive experience
   useEffect(() => {
     const requestFullscreen = async () => {
       try {
@@ -64,9 +64,9 @@ const Index = () => {
     setCameraReady(false);
     try {
       const newStream = await modernCamera.switchCamera();
-      if (newStream && videoRef[0]) {
-        videoRef[0].srcObject = newStream;
-        await videoRef[0].play();
+      if (newStream && videoRef.current) {
+        videoRef.current.srcObject = newStream;
+        await videoRef.current.play();
         setCameraReady(true);
         toast.success('Camera switched');
       }
@@ -91,9 +91,9 @@ const Index = () => {
         </div>
       ) : (
         <>
-          {/* Full-screen mirrored video */}
+          {/* Full-screen mirrored video - the main therapeutic interface */}
           <video
-            ref={(el) => { videoRef[1] = el; videoRef[0] = el; }}
+            ref={videoRef}
             className="w-full h-screen object-cover scale-x-[-1]"
             playsInline
             muted  
@@ -108,7 +108,7 @@ const Index = () => {
             }}
           />
 
-          {/* Minimal controls - hidden by default */}
+          {/* Minimal overlay controls - hidden by default for clean experience */}
           {showControls && (
             <div className="absolute top-4 right-4 space-y-2 z-10">
               <button
@@ -136,7 +136,7 @@ const Index = () => {
             </div>
           )}
 
-          {/* Touch/click to show controls */}
+          {/* Tap anywhere to show controls when needed */}
           {!showControls && (
             <button 
               onClick={() => setShowControls(true)}
@@ -145,12 +145,12 @@ const Index = () => {
             />
           )}
 
-          {/* Loading state */}
+          {/* Loading state - clean and minimal */}
           {!cameraReady && !error && (
             <div className="absolute inset-0 flex items-center justify-center bg-black z-20">
               <div className="text-center">
                 <div className="animate-spin w-12 h-12 border-4 border-white border-t-transparent rounded-full mb-4 mx-auto"></div>
-                <p className="text-white text-xl font-medium">Starting camera...</p>
+                <p className="text-white text-xl font-medium">Starting high-quality camera...</p>
               </div>
             </div>
           )}

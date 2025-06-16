@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils';
 import Button from './Button';
 import { Eye, EyeOff, Play, Pause, X, AlertTriangle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import SlothAssistant from './SlothAssistant';
 
 interface ExerciseControlsProps {
   onClose?: () => void;
@@ -32,7 +31,6 @@ const ExerciseControls = ({
   timeRemaining = 300
 }: ExerciseControlsProps) => {
   const [animateTimeRemaining, setAnimateTimeRemaining] = useState(false);
-  const [showSlothMessage, setShowSlothMessage] = useState(true);
   const { t } = useLanguage();
   
   // Animate time remaining when it changes
@@ -48,39 +46,9 @@ const ExerciseControls = ({
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
-
-  // Get sloth message based on the exercise state
-  const getSlothMessage = () => {
-    if (!isRunning) {
-      return t('exercise.sloth.start');
-    }
-    
-    if (!leftEyeDetected && !rightEyeDetected) {
-      return t('exercise.sloth.noEyesDetected');
-    }
-    
-    if (timeRemaining < 30) {
-      return t('exercise.sloth.almostDone');
-    }
-    
-    return t('exercise.sloth.keepGoing');
-  };
   
   return (
     <div className="w-full max-w-lg mx-auto glass px-8 py-6 rounded-2xl animate-slide-up bg-white/80 border-2 border-amber-200 shadow-lg">
-      {/* Sloth Assistant */}
-      {showSlothMessage && (
-        <div className="mb-6">
-          <SlothAssistant message={getSlothMessage()} />
-          <button 
-            onClick={() => setShowSlothMessage(false)} 
-            className="text-xs text-slate-500 hover:text-slate-700 mt-2 underline"
-          >
-            {t('exercise.sloth.dismiss')}
-          </button>
-        </div>
-      )}
-
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-medium">{t('exercise.title', { current: currentExercise, total: totalExercises })}</h2>
         <button 
@@ -143,7 +111,7 @@ const ExerciseControls = ({
         <div className="w-full h-3 bg-blue-100 rounded-full overflow-hidden">
           <div 
             className="h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-1000"
-            style={{ width: `${(timeRemaining / 300) * 100}%` }} // Assuming 5 minutes (300 seconds) total
+            style={{ width: `${(timeRemaining / 300) * 100}%` }}
           />
         </div>
       </div>
