@@ -1,13 +1,42 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { modernCamera } from '@/services/ModernCameraService';
+import { modernFaceDetection, EyeData } from '@/services/ModernFaceDetection';
 import { toast } from 'sonner';
 
 const Index = () => {
   const [cameraReady, setCameraReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [faceDetectionReady, setFaceDetectionReady] = useState(false);
+  const [currentEyeData, setCurrentEyeData] = useState<EyeData | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const animationFrameRef = useRef<number>();
   const [showControls, setShowControls] = useState(false);
+  
+  // Initialize face detection
+  useEffect(() => {
+    const initFaceDetection = async () => {
+      try {
+        const success = await modernFaceDetection.initialize();
+        if (success) {
+          setFaceDetectionReady(true);
+          console.log('Face detection ready');
+        } else {
+          console.error('Face detection failed to initialize');
+        }
+      } catch (err) {
+        console.error('Face detection initialization failed:', err);
+      }
+    };
+
+    initFaceDetection();
+
+    return () => {
+      modernFaceDetection.cleanup();
+    };
+  }, []);
   
   // Initialize camera immediately with high quality settings
   useEffect(() => {
@@ -44,6 +73,119 @@ const Index = () => {
     };
   }, []);
 
+  // Face tracking loop
+  useEffect(() => {
+    if (!cameraReady || !faceDetectionReady || !videoRef.current) return;
+
+    const trackFace = async () => {
+      try {
+        const result = await modernFaceDetection.detectFace(videoRef.current!);
+        
+        if (result.detected && result.eyeData) {
+          setCurrentEyeData(result.eyeData);
+          
+          // Draw eye indicators
+          if (canvasRef.current && containerRef.current) {
+            drawEyeIndicators(result.eyeData);
+          }
+        } else {
+          setCurrentEyeData(null);
+          
+          // Clear canvas
+          if (canvasRef.current) {
+            const ctx = canvasRef.current.getContext('2d');
+            if (ctx) {
+              ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Face tracking error:', err);
+      }
+      
+      animationFrameRef.current = requestAnimationFrame(trackFace);
+    };
+
+    trackFace();
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [cameraReady, faceDetectionReady]);
+
+  // Draw minimal eye indicators
+  const drawEyeIndicators = (eyeData: EyeData) => {
+    if (!canvasRef.current || !containerRef.current) return;
+
+    const ctx = canvasRef.current.getContext('2d');
+    if (!ctx) return;
+
+    const containerWidth = containerRef.current.clientWidth;
+    const containerHeight = containerRef.current.clientHeight;
+
+    ctx.clearRect(0, 0, containerWidth, containerHeight);
+
+    // Draw simple eye circles
+    const drawEyeCircle = (x: number, y: number, side: 'left' | 'right') => {
+      ctx.save();
+      
+      // Convert video coordinates to canvas coordinates
+      const canvasX = (x / (videoRef.current?.videoWidth || 1)) * containerWidth;
+      const canvasY = (y / (videoRef.current?.videoHeight || 1)) * containerHeight;
+      
+      // Draw outer circle
+      ctx.beginPath();
+      ctx.arc(canvasX, canvasY, 25, 0, Math.PI * 2);
+      ctx.strokeStyle = '#00FF88';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      
+      // Draw center dot
+      ctx.beginPath();
+      ctx.arc(canvasX, canvasY, 3, 0, Math.PI * 2);
+      ctx.fillStyle = '#00FF88';
+      ctx.fill();
+      
+      // Label
+      ctx.fillStyle = '#00FF88';
+      ctx.font = '14px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(side === 'left' ? 'L' : 'R', canvasX, canvasY - 35);
+      
+      ctx.restore();
+    };
+
+    // Draw both eyes
+    drawEyeCircle(eyeData.leftEye.x, eyeData.leftEye.y, 'left');
+    drawEyeCircle(eyeData.rightEye.x, eyeData.rightEye.y, 'right');
+
+    // Draw alignment indicator
+    if (eyeData.eyeAlignment > 0.8) {
+      ctx.fillStyle = '#00FF88';
+      ctx.font = '16px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Eyes Aligned ✓', containerWidth / 2, 50);
+    }
+  };
+
+  // Canvas size sync
+  useEffect(() => {
+    if (!containerRef.current || !canvasRef.current) return;
+
+    const resizeCanvas = () => {
+      if (canvasRef.current && containerRef.current) {
+        canvasRef.current.width = containerRef.current.clientWidth;
+        canvasRef.current.height = containerRef.current.clientHeight;
+      }
+    };
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    return () => window.removeEventListener('resize', resizeCanvas);
+  }, []);
+
   // Request fullscreen immediately for immersive experience
   useEffect(() => {
     const requestFullscreen = async () => {
@@ -77,7 +219,7 @@ const Index = () => {
   };
   
   return (
-    <div className="min-h-screen w-full bg-black overflow-hidden">
+    <div ref={containerRef} className="min-h-screen w-full bg-black overflow-hidden">
       {error ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-white bg-black">
           <h3 className="text-2xl font-bold mb-4">Camera Access Required</h3>
@@ -108,6 +250,12 @@ const Index = () => {
             }}
           />
 
+          {/* Eye tracking overlay canvas */}
+          <canvas 
+            ref={canvasRef}
+            className="absolute top-0 left-0 w-full h-full pointer-events-none scale-x-[-1] z-10"
+          />
+
           {/* Minimal overlay controls - hidden by default for clean experience */}
           {showControls && (
             <div className="absolute top-4 right-4 space-y-2 z-10">
@@ -136,6 +284,16 @@ const Index = () => {
             </div>
           )}
 
+          {/* Eye tracking status indicator */}
+          {currentEyeData && (
+            <div className="absolute bottom-4 left-4 bg-black/50 text-white p-3 rounded-lg backdrop-blur-sm z-10">
+              <div className="text-sm space-y-1">
+                <div>👁️ Eyes Detected</div>
+                <div>Alignment: {(currentEyeData.eyeAlignment * 100).toFixed(0)}%</div>
+              </div>
+            </div>
+          )}
+
           {/* Tap anywhere to show controls when needed */}
           {!showControls && (
             <button 
@@ -152,6 +310,13 @@ const Index = () => {
                 <div className="animate-spin w-12 h-12 border-4 border-white border-t-transparent rounded-full mb-4 mx-auto"></div>
                 <p className="text-white text-xl font-medium">Starting high-quality camera...</p>
               </div>
+            </div>
+          )}
+
+          {/* Face detection loading */}
+          {cameraReady && !faceDetectionReady && (
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-lg z-10">
+              <p className="text-sm">Loading eye detection...</p>
             </div>
           )}
         </>
