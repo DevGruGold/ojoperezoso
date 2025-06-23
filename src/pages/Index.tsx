@@ -185,7 +185,7 @@ const Index = () => {
     }
   };
 
-  // Improved eye indicator drawing with better centering
+  // Improved eye indicator drawing with corrected text direction
   const drawImprovedEyeIndicators = (eyeData: EyeData) => {
     if (!canvasRef.current || !containerRef.current) return;
 
@@ -245,14 +245,20 @@ const Index = () => {
       ctx.lineTo(canvasX, canvasY + 6);
       ctx.stroke();
       
-      // Enhanced labeling with drift warning
+      // Enhanced labeling with drift warning - fix text mirroring
+      ctx.save();
+      // Counter the canvas horizontal flip for text
+      ctx.scale(-1, 1);
+      ctx.translate(-containerWidth, 0);
+      
       ctx.fillStyle = baseColor;
       ctx.font = isLazy ? 'bold 16px sans-serif' : 'bold 14px sans-serif';
       ctx.textAlign = 'center';
       const label = side === 'left' ? 'R' : 'L'; // Corrected for mirror
       const warningText = isLazy ? `${label} (DRIFT)` : label;
-      ctx.fillText(warningText, canvasX, canvasY - 50);
+      ctx.fillText(warningText, containerWidth - canvasX, canvasY - 50);
       
+      ctx.restore();
       ctx.restore();
     };
 
@@ -260,7 +266,12 @@ const Index = () => {
     drawPreciseEyeCircle(eyeData.leftEye.x, eyeData.leftEye.y, 'left');
     drawPreciseEyeCircle(eyeData.rightEye.x, eyeData.rightEye.y, 'right');
 
-    // Enhanced alignment status with drift severity
+    // Enhanced alignment status with drift severity - fix text mirroring
+    ctx.save();
+    // Counter the canvas horizontal flip for text
+    ctx.scale(-1, 1);
+    ctx.translate(-containerWidth, 0);
+    
     const alignmentColor = lazyEyeDetected !== 'none' ? '#FF3333' : '#00FF66';
     if (eyeData.eyeAlignment > 0.85 && lazyEyeDetected === 'none') {
       ctx.fillStyle = alignmentColor;
@@ -275,6 +286,8 @@ const Index = () => {
         eyeDeviationHistory[eyeDeviationHistory.length - 1] > 20 ? 'SEVERE' : 'MODERATE' : '';
       ctx.fillText(`⚠️ ${lazyEyeDetected.toUpperCase()} EYE ${driftSeverity} DRIFT`, containerWidth / 2, 60);
     }
+    
+    ctx.restore();
 
     // Draw exercise targets if active
     if (exerciseActive) {
@@ -302,12 +315,17 @@ const Index = () => {
       ctx.lineWidth = 2;
       ctx.stroke();
       
-      // Draw target number
+      // Draw target number - fix text mirroring
+      ctx.save();
+      ctx.scale(-1, 1);
+      ctx.translate(-width, 0);
+      
       ctx.fillStyle = 'white';
       ctx.font = 'bold 16px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText((index + 1).toString(), target.x, target.y + 5);
+      ctx.fillText((index + 1).toString(), width - target.x, target.y + 5);
       
+      ctx.restore();
       ctx.restore();
     });
   };
