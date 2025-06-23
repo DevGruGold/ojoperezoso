@@ -1,8 +1,8 @@
-
 import { useEffect, useRef, useState } from 'react';
 import { modernCamera } from '@/services/ModernCameraService';
 import { modernFaceDetection, EyeData } from '@/services/ModernFaceDetection';
 import { toast } from 'sonner';
+import ExerciseControls from '@/components/ExerciseControls';
 
 const Index = () => {
   const [cameraReady, setCameraReady] = useState(false);
@@ -14,6 +14,9 @@ const Index = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const animationFrameRef = useRef<number>();
   const [showControls, setShowControls] = useState(false);
+  const [exerciseActive, setExerciseActive] = useState(false);
+  const [currentExerciseStep, setCurrentExerciseStep] = useState(0);
+  const [exerciseType, setExerciseType] = useState<'saccades' | 'pursuit' | 'focus'>('saccades');
   
   // Initialize face detection
   useEffect(() => {
@@ -115,7 +118,7 @@ const Index = () => {
     };
   }, [cameraReady, faceDetectionReady]);
 
-  // Draw minimal eye indicators
+  // Draw minimal eye indicators with corrected labels
   const drawEyeIndicators = (eyeData: EyeData) => {
     if (!canvasRef.current || !containerRef.current) return;
 
@@ -127,7 +130,7 @@ const Index = () => {
 
     ctx.clearRect(0, 0, containerWidth, containerHeight);
 
-    // Draw simple eye circles
+    // Draw simple eye circles with CORRECTED labels (flipped because of mirror effect)
     const drawEyeCircle = (x: number, y: number, side: 'left' | 'right') => {
       ctx.save();
       
@@ -148,18 +151,18 @@ const Index = () => {
       ctx.fillStyle = '#00FF88';
       ctx.fill();
       
-      // Label
+      // Label - FIXED: swap labels due to mirror effect
       ctx.fillStyle = '#00FF88';
       ctx.font = '14px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(side === 'left' ? 'L' : 'R', canvasX, canvasY - 35);
+      ctx.fillText(side === 'left' ? 'R' : 'L', canvasX, canvasY - 35);
       
       ctx.restore();
     };
 
-    // Draw both eyes
-    drawEyeCircle(eyeData.leftEye.x, eyeData.leftEye.y, 'left');
-    drawEyeCircle(eyeData.rightEye.x, eyeData.rightEye.y, 'right');
+    // Draw both eyes with corrected labels
+    drawEyeCircle(eyeData.leftEye.x, eyeData.leftEye.y, 'left');  // Shows 'R' due to mirror
+    drawEyeCircle(eyeData.rightEye.x, eyeData.rightEye.y, 'right'); // Shows 'L' due to mirror
 
     // Draw alignment indicator
     if (eyeData.eyeAlignment > 0.8) {
@@ -168,7 +171,113 @@ const Index = () => {
       ctx.textAlign = 'center';
       ctx.fillText('Eyes Aligned ✓', containerWidth / 2, 50);
     }
+
+    // Draw exercise targets if active
+    if (exerciseActive) {
+      drawExerciseTargets(ctx, containerWidth, containerHeight);
+    }
   };
+
+  // Exercise target drawing
+  const drawExerciseTargets = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
+    const targets = getExerciseTargets(exerciseType, currentExerciseStep, width, height);
+    
+    targets.forEach((target, index) => {
+      ctx.save();
+      
+      // Draw target circle
+      ctx.beginPath();
+      ctx.arc(target.x, target.y, target.size, 0, Math.PI * 2);
+      ctx.fillStyle = target.color;
+      ctx.fill();
+      
+      // Draw target ring
+      ctx.beginPath();
+      ctx.arc(target.x, target.y, target.size + 5, 0, Math.PI * 2);
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      
+      // Draw target number
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 16px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText((index + 1).toString(), target.x, target.y + 5);
+      
+      ctx.restore();
+    });
+  };
+
+  // Get exercise targets based on type and step
+  const getExerciseTargets = (type: string, step: number, width: number, height: number) => {
+    const targets = [];
+    
+    switch (type) {
+      case 'saccades':
+        // Quick eye movements between corners
+        const saccadePositions = [
+          { x: width * 0.2, y: height * 0.2 },
+          { x: width * 0.8, y: height * 0.2 },
+          { x: width * 0.8, y: height * 0.8 },
+          { x: width * 0.2, y: height * 0.8 },
+          { x: width * 0.5, y: height * 0.5 }
+        ];
+        targets.push({
+          ...saccadePositions[step % saccadePositions.length],
+          size: 20,
+          color: '#FF6B6B'
+        });
+        break;
+        
+      case 'pursuit':
+        // Smooth following movement
+        const angle = (step * 0.1) % (Math.PI * 2);
+        targets.push({
+          x: width * 0.5 + Math.cos(angle) * width * 0.3,
+          y: height * 0.5 + Math.sin(angle) * height * 0.3,
+          size: 15,
+          color: '#4ECDC4'
+        });
+        break;
+        
+      case 'focus':
+        // Near-far focusing
+        const focusSize = 10 + (Math.sin(step * 0.05) + 1) * 15;
+        targets.push({
+          x: width * 0.5,
+          y: height * 0.5,
+          size: focusSize,
+          color: '#45B7D1'
+        });
+        break;
+    }
+    
+    return targets;
+  };
+
+  // Exercise controls
+  const startExercise = (type: 'saccades' | 'pursuit' | 'focus') => {
+    setExerciseType(type);
+    setExerciseActive(true);
+    setCurrentExerciseStep(0);
+    toast.success(`Starting ${type} exercise`);
+  };
+
+  const stopExercise = () => {
+    setExerciseActive(false);
+    toast.success('Exercise completed');
+  };
+
+  // Auto-advance exercise steps
+  useEffect(() => {
+    if (!exerciseActive) return;
+    
+    const interval = setInterval(() => {
+      setCurrentExerciseStep(prev => prev + 1);
+    }, exerciseType === 'saccades' ? 2000 : exerciseType === 'pursuit' ? 100 : 1000);
+    
+    return () => clearInterval(interval);
+  }, [exerciseActive, exerciseType]);
 
   // Canvas size sync
   useEffect(() => {
@@ -233,7 +342,7 @@ const Index = () => {
         </div>
       ) : (
         <>
-          {/* Full-screen mirrored video - the main therapeutic interface */}
+          {/* Full-screen mirrored video */}
           <video
             ref={videoRef}
             className="w-full h-screen object-cover scale-x-[-1]"
@@ -256,7 +365,47 @@ const Index = () => {
             className="absolute top-0 left-0 w-full h-full pointer-events-none scale-x-[-1] z-10"
           />
 
-          {/* Minimal overlay controls - hidden by default for clean experience */}
+          {/* Exercise Controls */}
+          {showControls && (
+            <div className="absolute top-4 left-4 space-y-2 z-20">
+              <div className="bg-black/70 text-white p-4 rounded-lg backdrop-blur-sm">
+                <h3 className="font-bold mb-2">Eye Exercises</h3>
+                <div className="space-y-2">
+                  <button
+                    onClick={() => startExercise('saccades')}
+                    disabled={exerciseActive}
+                    className="w-full px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50"
+                  >
+                    Saccades (Quick Movements)
+                  </button>
+                  <button
+                    onClick={() => startExercise('pursuit')}
+                    disabled={exerciseActive}
+                    className="w-full px-3 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 disabled:opacity-50"
+                  >
+                    Smooth Pursuit
+                  </button>
+                  <button
+                    onClick={() => startExercise('focus')}
+                    disabled={exerciseActive}
+                    className="w-full px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+                  >
+                    Focus Training
+                  </button>
+                  {exerciseActive && (
+                    <button
+                      onClick={stopExercise}
+                      className="w-full px-3 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+                    >
+                      Stop Exercise
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Minimal overlay controls */}
           {showControls && (
             <div className="absolute top-4 right-4 space-y-2 z-10">
               <button
@@ -281,6 +430,20 @@ const Index = () => {
                   <line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
               </button>
+            </div>
+          )}
+
+          {/* Exercise status indicator */}
+          {exerciseActive && (
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-4 py-2 rounded-lg backdrop-blur-sm z-10">
+              <div className="text-center">
+                <div className="text-sm font-medium">
+                  {exerciseType.charAt(0).toUpperCase() + exerciseType.slice(1)} Exercise
+                </div>
+                <div className="text-xs opacity-80">
+                  Follow the target with your eyes
+                </div>
+              </div>
             </div>
           )}
 
