@@ -1,139 +1,125 @@
-import { useState, useEffect } from 'react';
+
+import React from 'react';
+import { Eye, EyeOff, Play, Pause, Square } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import Button from './Button';
-import { Eye, EyeOff, Play, Pause, X, AlertTriangle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { toast } from 'sonner';
 
 interface ExerciseControlsProps {
-  onClose?: () => void;
-  onStart?: () => void;
-  onPause?: () => void;
-  onEnd?: () => void;
-  isRunning?: boolean;
-  leftEyeDetected?: boolean;
-  rightEyeDetected?: boolean;
-  currentExercise?: number;
-  totalExercises?: number;
-  timeRemaining?: number;
+  onStart: () => void;
+  onPause: () => void;
+  onEnd: () => void;
+  isRunning: boolean;
+  leftEyeDetected: boolean;
+  rightEyeDetected: boolean;
+  currentExercise: number;
+  totalExercises: number;
+  timeRemaining: number;
 }
 
 const ExerciseControls = ({
-  onStart = () => {},
-  onPause = () => {},
-  onEnd = () => {},
-  onClose = () => {},
-  isRunning = false,
-  leftEyeDetected = false,
-  rightEyeDetected = false,
-  currentExercise = 1,
-  totalExercises = 5,
-  timeRemaining = 300
+  onStart,
+  onPause,
+  onEnd,
+  isRunning,
+  leftEyeDetected,
+  rightEyeDetected,
+  currentExercise,
+  totalExercises,
+  timeRemaining
 }: ExerciseControlsProps) => {
-  const [animateTimeRemaining, setAnimateTimeRemaining] = useState(false);
   const { t } = useLanguage();
-  
-  // Animate time remaining when it changes
-  useEffect(() => {
-    setAnimateTimeRemaining(true);
-    const timer = setTimeout(() => setAnimateTimeRemaining(false), 500);
-    return () => clearTimeout(timer);
-  }, [timeRemaining]);
-  
-  // Format time as MM:SS
+
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
-  
+
+  const handleStart = () => {
+    if (!leftEyeDetected || !rightEyeDetected) {
+      toast.error(t('exercise.eyesNotDetected'));
+      return;
+    }
+    onStart();
+  };
+
   return (
-    <div className="w-full max-w-lg mx-auto glass px-8 py-6 rounded-2xl animate-slide-up bg-white/80 border-2 border-amber-200 shadow-lg">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-medium">{t('exercise.title', { current: currentExercise, total: totalExercises })}</h2>
-        <button 
-          onClick={onClose}
-          className="p-1.5 rounded-full hover:bg-secondary/80 transition-colors"
-          aria-label={t('exercise.close')}
-        >
-          <X className="w-5 h-5" />
-        </button>
-      </div>
-      
-      <div className="flex items-center justify-around mb-8">
-        <div className="flex flex-col items-center">
-          <div className={cn(
-            "w-14 h-14 rounded-full mb-2 flex items-center justify-center",
-            leftEyeDetected ? "bg-green-100" : "bg-amber-100"
+    <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-blue-100 max-w-md mx-auto">
+      {/* Eye Detection Status */}
+      <div className="flex justify-center space-x-6 mb-6">
+        <div className="flex items-center space-x-2">
+          {leftEyeDetected ? (
+            <Eye className="w-6 h-6 text-green-500" />
+          ) : (
+            <EyeOff className="w-6 h-6 text-red-400" />
+          )}
+          <span className={cn(
+            "text-sm font-medium",
+            leftEyeDetected ? "text-green-600" : "text-red-500"
           )}>
-            {leftEyeDetected ? (
-              <Eye className="w-6 h-6 text-green-600" />
-            ) : (
-              <AlertTriangle className="w-6 h-6 text-amber-600" />
-            )}
-          </div>
-          <span className="text-sm font-medium">{t('exercise.leftEye')}</span>
-          <span className="text-xs text-foreground/70">
-            {leftEyeDetected ? t('exercise.detected') : t('exercise.keepTrying')}
+            {t('exercise.leftEye')}
           </span>
         </div>
         
-        <div className="flex flex-col items-center">
-          <div className={cn(
-            "w-14 h-14 rounded-full mb-2 flex items-center justify-center",
-            rightEyeDetected ? "bg-green-100" : "bg-amber-100"
+        <div className="flex items-center space-x-2">
+          {rightEyeDetected ? (
+            <Eye className="w-6 h-6 text-green-500" />
+          ) : (
+            <EyeOff className="w-6 h-6 text-red-400" />
+          )}
+          <span className={cn(
+            "text-sm font-medium",
+            rightEyeDetected ? "text-green-600" : "text-red-500"
           )}>
-            {rightEyeDetected ? (
-              <Eye className="w-6 h-6 text-green-600" /> 
-            ) : (
-              <AlertTriangle className="w-6 h-6 text-amber-600" />
-            )}
-          </div>
-          <span className="text-sm font-medium">{t('exercise.rightEye')}</span>
-          <span className="text-xs text-foreground/70">
-            {rightEyeDetected ? t('exercise.detected') : t('exercise.keepTrying')}
+            {t('exercise.rightEye')}
           </span>
         </div>
       </div>
-      
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium">{t('exercise.timeRemaining')}</span>
-          <span 
-            className={cn(
-              "text-lg font-semibold transition-all",
-              animateTimeRemaining && "scale-110 text-primary"
-            )}
-          >
-            {formatTime(timeRemaining)}
-          </span>
+
+      {/* Time and Progress */}
+      <div className="text-center mb-6">
+        <div className="text-2xl font-bold text-blue-600 mb-2">
+          {formatTime(timeRemaining)}
         </div>
-        <div className="w-full h-3 bg-blue-100 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-1000"
-            style={{ width: `${(timeRemaining / 300) * 100}%` }}
-          />
+        <div className="text-sm text-gray-600">
+          {t('exercise.session')} {currentExercise} / {totalExercises}
         </div>
       </div>
-      
+
+      {/* Control Buttons */}
       <div className="flex justify-center space-x-4">
-        {isRunning ? (
-          <Button 
-            onClick={onPause}
-            variant="secondary"
-            className="w-32 rounded-full"
+        {!isRunning ? (
+          <button
+            onClick={handleStart}
+            disabled={!leftEyeDetected || !rightEyeDetected}
+            className={cn(
+              "flex items-center space-x-2 px-6 py-3 rounded-full font-medium transition-all",
+              (leftEyeDetected && rightEyeDetected)
+                ? "bg-green-500 text-white hover:bg-green-600 shadow-lg hover:shadow-xl"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            )}
           >
-            <Pause className="w-4 h-4 mr-2" />
-            {t('exercise.pause')}
-          </Button>
+            <Play className="w-5 h-5" />
+            <span>{t('exercise.start')}</span>
+          </button>
         ) : (
-          <Button 
-            onClick={onStart}
-            className="w-32 bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white rounded-full"
+          <button
+            onClick={onPause}
+            className="flex items-center space-x-2 px-6 py-3 bg-amber-500 text-white rounded-full font-medium hover:bg-amber-600 transition-all shadow-lg hover:shadow-xl"
           >
-            <Play className="w-4 h-4 mr-2" />
-            {t('exercise.start')}
-          </Button>
+            <Pause className="w-5 h-5" />
+            <span>{t('exercise.pause')}</span>
+          </button>
         )}
+        
+        <button
+          onClick={onEnd}
+          className="flex items-center space-x-2 px-6 py-3 bg-red-500 text-white rounded-full font-medium hover:bg-red-600 transition-all shadow-lg hover:shadow-xl"
+        >
+          <Square className="w-5 h-5" />
+          <span>{t('exercise.end')}</span>
+        </button>
       </div>
     </div>
   );

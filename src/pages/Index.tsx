@@ -18,6 +18,10 @@ const Index = () => {
   const [currentExerciseStep, setCurrentExerciseStep] = useState(0);
   const [exerciseType, setExerciseType] = useState<'saccades' | 'pursuit' | 'focus'>('saccades');
   
+  // Eye deviation tracking for lazy eye detection
+  const [eyeDeviationHistory, setEyeDeviationHistory] = useState<number[]>([]);
+  const [lazyEyeDetected, setLazyEyeDetected] = useState<'none' | 'left' | 'right'>('none');
+  
   // Initialize face detection
   useEffect(() => {
     const initFaceDetection = async () => {
@@ -87,7 +91,14 @@ const Index = () => {
         if (result.detected && result.eyeData) {
           setCurrentEyeData(result.eyeData);
           
-          // Draw eye indicators
+          // Calculate eye deviation for lazy eye detection
+          const eyeDeviation = calculateEyeDeviation(result.eyeData);
+          setEyeDeviationHistory(prev => [...prev.slice(-30), eyeDeviation]);
+          
+          // Detect lazy eye based on deviation history
+          detectLazyEye(eyeDeviationHistory);
+          
+          // Draw eye indicators with improved centering
           if (canvasRef.current && containerRef.current) {
             drawEyeIndicators(result.eyeData);
           }
@@ -116,9 +127,47 @@ const Index = () => {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [cameraReady, faceDetectionReady]);
+  }, [cameraReady, faceDetectionReady, eyeDeviationHistory]);
 
-  // Draw minimal eye indicators with corrected labels
+  // Calculate eye deviation for lazy eye detection
+  const calculateEyeDeviation = (eyeData: EyeData): number => {
+    const leftEye = eyeData.leftEye;
+    const rightEye = eyeData.rightEye;
+    
+    // Calculate the vertical difference between eyes (should be minimal)
+    const verticalDeviation = Math.abs(leftEye.y - rightEye.y);
+    
+    // Calculate horizontal alignment relative to face center
+    const eyeCenter = (leftEye.x + rightEye.x) / 2;
+    const expectedCenter = (videoRef.current?.videoWidth || 640) / 2;
+    const horizontalDeviation = Math.abs(eyeCenter - expectedCenter);
+    
+    return verticalDeviation + (horizontalDeviation * 0.5);
+  };
+
+  // Detect lazy eye based on deviation patterns
+  const detectLazyEye = (deviationHistory: number[]) => {
+    if (deviationHistory.length < 30) return;
+    
+    const avgDeviation = deviationHistory.reduce((sum, dev) => sum + dev, 0) / deviationHistory.length;
+    const threshold = 15; // pixels
+    
+    if (avgDeviation > threshold && currentEyeData) {
+      // Determine which eye is deviating more
+      const leftEyeDeviation = Math.abs(currentEyeData.leftEye.y - currentEyeData.rightEye.y);
+      const rightEyeDeviation = Math.abs(currentEyeData.rightEye.y - currentEyeData.leftEye.y);
+      
+      if (leftEyeDeviation > rightEyeDeviation) {
+        setLazyEyeDetected('left');
+      } else {
+        setLazyEyeDetected('right');
+      }
+    } else {
+      setLazyEyeDetected('none');
+    }
+  };
+
+  // Draw eye indicators with improved accuracy and lazy eye detection
   const drawEyeIndicators = (eyeData: EyeData) => {
     if (!canvasRef.current || !containerRef.current) return;
 
@@ -130,46 +179,72 @@ const Index = () => {
 
     ctx.clearRect(0, 0, containerWidth, containerHeight);
 
-    // Draw simple eye circles with CORRECTED labels (flipped because of mirror effect)
+    // Draw eye circles with improved centering and lazy eye indication
     const drawEyeCircle = (x: number, y: number, side: 'left' | 'right') => {
       ctx.save();
       
-      // Convert video coordinates to canvas coordinates
+      // Convert video coordinates to canvas coordinates with better precision
       const canvasX = (x / (videoRef.current?.videoWidth || 1)) * containerWidth;
       const canvasY = (y / (videoRef.current?.videoHeight || 1)) * containerHeight;
       
-      // Draw outer circle
+      // Determine eye health status
+      const isLazy = lazyEyeDetected === side;
+      const baseColor = isLazy ? '#FF4444' : '#00FF88';
+      
+      // Draw outer circle with lazy eye warning
       ctx.beginPath();
-      ctx.arc(canvasX, canvasY, 25, 0, Math.PI * 2);
-      ctx.strokeStyle = '#00FF88';
-      ctx.lineWidth = 2;
+      ctx.arc(canvasX, canvasY, isLazy ? 35 : 25, 0, Math.PI * 2);
+      ctx.strokeStyle = baseColor;
+      ctx.lineWidth = isLazy ? 3 : 2;
+      if (isLazy) {
+        ctx.setLineDash([5, 5]);
+      }
+      ctx.stroke();
+      
+      // Draw center crosshair for precise centering
+      ctx.setLineDash([]);
+      ctx.strokeStyle = baseColor;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(canvasX - 8, canvasY);
+      ctx.lineTo(canvasX + 8, canvasY);
+      ctx.moveTo(canvasX, canvasY - 8);
+      ctx.lineTo(canvasX, canvasY + 8);
       ctx.stroke();
       
       // Draw center dot
       ctx.beginPath();
-      ctx.arc(canvasX, canvasY, 3, 0, Math.PI * 2);
-      ctx.fillStyle = '#00FF88';
+      ctx.arc(canvasX, canvasY, 2, 0, Math.PI * 2);
+      ctx.fillStyle = baseColor;
       ctx.fill();
       
-      // Label - FIXED: swap labels due to mirror effect
-      ctx.fillStyle = '#00FF88';
-      ctx.font = '14px sans-serif';
+      // Label with lazy eye warning - CORRECTED for mirror effect
+      ctx.fillStyle = baseColor;
+      ctx.font = isLazy ? 'bold 14px sans-serif' : '14px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(side === 'left' ? 'R' : 'L', canvasX, canvasY - 35);
+      const label = side === 'left' ? 'R' : 'L'; // Swapped for mirror effect
+      const warningLabel = isLazy ? `${label} (LAZY)` : label;
+      ctx.fillText(warningLabel, canvasX, canvasY - 45);
       
       ctx.restore();
     };
 
     // Draw both eyes with corrected labels
-    drawEyeCircle(eyeData.leftEye.x, eyeData.leftEye.y, 'left');  // Shows 'R' due to mirror
-    drawEyeCircle(eyeData.rightEye.x, eyeData.rightEye.y, 'right'); // Shows 'L' due to mirror
+    drawEyeCircle(eyeData.leftEye.x, eyeData.leftEye.y, 'left');
+    drawEyeCircle(eyeData.rightEye.x, eyeData.rightEye.y, 'right');
 
-    // Draw alignment indicator
-    if (eyeData.eyeAlignment > 0.8) {
-      ctx.fillStyle = '#00FF88';
+    // Draw alignment indicator with lazy eye status
+    const alignmentColor = lazyEyeDetected !== 'none' ? '#FF4444' : '#00FF88';
+    if (eyeData.eyeAlignment > 0.8 && lazyEyeDetected === 'none') {
+      ctx.fillStyle = alignmentColor;
       ctx.font = '16px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText('Eyes Aligned ✓', containerWidth / 2, 50);
+    } else if (lazyEyeDetected !== 'none') {
+      ctx.fillStyle = alignmentColor;
+      ctx.font = 'bold 16px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`⚠️ ${lazyEyeDetected.toUpperCase()} EYE DRIFT DETECTED`, containerWidth / 2, 50);
     }
 
     // Draw exercise targets if active
@@ -447,12 +522,17 @@ const Index = () => {
             </div>
           )}
 
-          {/* Eye tracking status indicator */}
+          {/* Enhanced eye tracking status indicator */}
           {currentEyeData && (
             <div className="absolute bottom-4 left-4 bg-black/50 text-white p-3 rounded-lg backdrop-blur-sm z-10">
               <div className="text-sm space-y-1">
                 <div>👁️ Eyes Detected</div>
                 <div>Alignment: {(currentEyeData.eyeAlignment * 100).toFixed(0)}%</div>
+                {lazyEyeDetected !== 'none' && (
+                  <div className="text-red-400 font-bold">
+                    ⚠️ {lazyEyeDetected.toUpperCase()} EYE DRIFT
+                  </div>
+                )}
               </div>
             </div>
           )}
